@@ -1,7 +1,5 @@
-const { CARAPI_URI, CARAPI_TOKEN, CARAPI_SECRET } = process.env;
-
 const getCarApiToken = async () => {
-  const response = await fetch(`${CARAPI_URI!}/api/auth/login`, {
+  const response = await fetch(`${process.env.CARAPI_URI!}/api/auth/login`, {
     method: "POST",
     headers: {
       accept: "text/plain",
@@ -9,8 +7,8 @@ const getCarApiToken = async () => {
     },
     cache: "force-cache",
     body: JSON.stringify({
-      api_token: CARAPI_TOKEN,
-      api_secret: CARAPI_SECRET,
+      api_token: process.env.CARAPI_TOKEN,
+      api_secret: process.env.CARAPI_SECRET,
     }),
   });
 
@@ -19,31 +17,34 @@ const getCarApiToken = async () => {
 };
 
 export interface CarMakesResponse {
-  data: [{ id: number; name: string }];
+  data: { id: number; name: string }[];
 }
 
-const carFetch = (url: string, token: string, method = 'GET') =>
-  fetch(`${CARAPI_URI!}${url}`, {
+export interface CarModelsResponse {
+  data: [{ id: number; make_id: string; name: string }];
+}
+
+const carFetch = (url: string, token: string, method = "GET") =>
+  fetch(`${process.env.CARAPI_URI!}${url}`, {
     method,
     headers: {
-      "Content-Type": "application/json",
       Authorisation: token,
     },
     cache: "force-cache",
   });
 
 const getCarMakes = async (token: string) => {
-  const response = await carFetch('/api/makes', token);
+  const response = await carFetch("api/makes", token);
   const models: CarMakesResponse = await response.json();
 
   return models;
 };
 
-const getCarModels = async (token: string) => {
-  const response = await carFetch('/api/model', token);
-  const models: CarMakesResponse = await response.json();
-  
+const getCarModels = async (token: string, make: string) => {
+  const response = await carFetch(`api/models?make=${make}&year=2020`, token);
+  const models: CarModelsResponse = await response.json();
+
   return models;
 };
 
-export { getCarApiToken, getCarMakes };
+export { getCarApiToken, getCarMakes, getCarModels };

@@ -1,9 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import { UIProvider } from "./providers/nextui";
-import Footer from "./components/footer";
-import Header from "./components/header";
+import Footer from "../components/footer";
+import Header from "../components/header";
+import { UIProvider } from "./nextui";
 
 const font = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] });
 
