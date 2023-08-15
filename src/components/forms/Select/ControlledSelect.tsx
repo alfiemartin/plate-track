@@ -19,9 +19,6 @@ const ControlledSelect = ({
   options,
   ...selectProps
 }: SelectProps) => {
-  if(name === 'carModel')
-  console.log(options);
-
   return (
     <Controller
       name={name}
@@ -32,7 +29,10 @@ const ControlledSelect = ({
           {...field}
           value={field.value?.value ? field.value : null}
           options={options}
-          placeholder={selectProps.placeholder}
+          placeholder={
+            <label className="text-sm px-1">{selectProps.placeholder}</label>
+          }
+          formatOptionLabel={({ value }) => <label className="text-sm px-1">{value}</label>}
         />
       )}
     />

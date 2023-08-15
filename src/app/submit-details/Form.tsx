@@ -6,7 +6,9 @@ import ControlledInput from "@/components/forms/Input/ControlledInput";
 import ControlledSelect, {
   Option,
 } from "@/components/forms/Select/ControlledSelect";
-import ReactSelect from "react-select";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -23,12 +25,25 @@ interface CarModel {
   value: string;
 }
 
+const yupOption = yup.object().shape({
+  label: yup.string().required(),
+  value: yup.string().required(),
+});
+
+const schema = yup.object().shape({
+  carPlateNumber: yup.string().email().required(),
+  carMake: yupOption,
+  carModel: yupOption,
+});
+
 const Form = ({ carMakes }: FormProps) => {
-  const { control, watch, resetField } = useForm<FormInputs>({
+  const { control, watch, resetField, formState } = useForm<FormInputs>({
     defaultValues: {
       carPlateNumber: "",
     },
     mode: "onChange",
+    reValidateMode: 'onChange',
+    resolver: yupResolver(schema) ,
   });
 
   const [carModels, setCarModels] = useState<CarModel[]>();
@@ -36,6 +51,7 @@ const Form = ({ carMakes }: FormProps) => {
   const carMake = watch("carMake");
 
   useEffect(() => {
+    console.log(formState);
     (async () => {
       if (carMake?.value) {
         setCarModels([]);
@@ -53,7 +69,9 @@ const Form = ({ carMakes }: FormProps) => {
       <ControlledInput
         control={control}
         name="carPlateNumber"
-        label="Car Plate Number"
+        label="Car number plate"
+        labelPlacement="inside"
+        errorMessage={formState.dirtyFields.carPlateNumber && <>{formState.errors.carPlateNumber?.message}</>}
       />
       <ControlledSelect
         control={control}
