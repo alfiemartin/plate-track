@@ -20,7 +20,6 @@ const getCarApiToken = async () => {
     }),
   });
 
-  console.log(response.status, response.statusText);
   console.log("token created");
 
   const token = await response.text();
@@ -28,33 +27,26 @@ const getCarApiToken = async () => {
 };
 
 const carFetch = async (url: string, token: string, method = "GET") => {
-  try {
     const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
       method,
       headers: {
         Authorization: token,
       },
       cache: "force-cache",
-    });
+    })
 
-    return response;
-  } catch (e) {
-    console.log(e);
-    throw new Error('Failed to fetch');
-  }
+    if(!response.ok) throw new Error('Failed to fetch');
+
+    return response.json();
 };
 
 const getCarMakes = async (token: string) => {
-  const response = await carFetch("api/makes", token);
-  const models: CarMakesResponse = await response.json();
-
-  return models;
+  const makes: CarMakesResponse = await carFetch("api/makes", token);
+  return makes;
 };
 
 const getCarModels = async (token: string, make: string) => {
-  const response = await carFetch(`api/models?make=${make}&year=2020`, token);
-  const models: CarModelsResponse = await response.json();
-
+  const models = await carFetch(`api/models?make=${make}&year=2020`, token);
   return models;
 };
 

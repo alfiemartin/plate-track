@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
 
 export async function GET(Request: NextRequest) {
-  return new Response(global.carApiKey);
+  return new Response(globalThis.carApiKey);
 }

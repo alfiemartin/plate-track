@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 export async function GET(Request: NextRequest) {
   const carMake = Request.nextUrl.searchParams.get("make");
   const carModelsResponse = await getCarModels(
-    global.carApiKey,
+    globalThis.carApiKey,
     carMake ?? "ford"
   );
 

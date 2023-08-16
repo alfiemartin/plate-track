@@ -1,10 +1,10 @@
 import { getCarApiToken } from "@/services/carapi";
 
-declare global {
+ declare global {
   var carApiKey: string;
 }
 
 export const carApiKey = async () => {
   console.log('token refreshed by singleton')
-  global.carApiKey = global.carApiKey ?? await getCarApiToken();
+  globalThis.carApiKey = globalThis.carApiKey ?? await getCarApiToken();
 };
