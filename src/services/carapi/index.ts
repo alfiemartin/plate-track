@@ -36,7 +36,7 @@ const carFetch = async (url: string, token: string, method = "GET") => {
   });
 
   if(response.status !== 200) {
-    throw new Error('JWT Expired probs');
+    throw new Error(`JWT Expired probs, ${response.status}`);
   }
 
   return response;
