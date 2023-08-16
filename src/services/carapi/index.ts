@@ -30,7 +30,7 @@ const carFetch = async (url: string, token: string, method = "GET") => {
     const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
       method,
       headers: {
-        Authorization: token,
+        Authorization: token ?? await getCarApiToken(),
       },
       cache: "force-cache",
     })
