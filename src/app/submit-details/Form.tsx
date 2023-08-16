@@ -59,7 +59,7 @@ const Form = ({ carMakes }: FormProps) => {
   }, [carMake]);
 
   return (
-    <form className="w-96 mx-auto flex flex-col gap-4">
+    <form className="w-full px-2 sm:px-0 sm:w-96 mx-auto flex flex-col gap-4">
       <ControlledInput
         control={control}
         name="carPlateNumber"

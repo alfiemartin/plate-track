@@ -1,16 +1,18 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import ReactSelect, { Props } from "react-select";
-import * as yup from 'yup';
+import { object, string } from "yup";
 
 export interface Option {
   value: string;
   label: string;
 }
 
-export const yupSelectOption = yup.object({
-  value: yup.string().required(),
-  label: yup.string().required(),
+export const emptyOption = { value: "", label: "" } as const;
+
+export const yupSelectOption = object({
+  value: string().required(),
+  label: string().required(),
 });
 
 interface SelectProps extends Props {
@@ -24,24 +26,50 @@ const ControlledSelect = ({
   control,
   options,
   placeholder,
-  isLoading
+  isLoading,
 }: SelectProps) => {
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={{ label: "", value: "" }}
+      defaultValue={emptyOption}
       render={({ field }) => (
         <ReactSelect
           {...field}
           value={field.value?.value ? field.value : null}
           options={options}
-          placeholder={
-            <label className="text-sm px-1">{placeholder}</label>
-          }
+          placeholder={<label className="text-sm px-1">{placeholder}</label>}
           isLoading={isLoading}
           isDisabled={!options}
-          formatOptionLabel={({ value }) => <label className="text-sm px-1">{value}</label>}
+          formatOptionLabel={({ value }) => (
+            <label className="text-sm px-1">{value}</label>
+          )}
+          styles={{
+            control: (base, state) => ({
+              ...base,
+              borderWidth:  undefined,
+              borderColor: undefined,
+              borderRadius: undefined,
+              boxShadow: undefined,
+              outline: undefined,
+              transition: undefined,
+              "&:hover": {
+                outline: undefined,
+                borderColor: undefined,
+              }
+            })
+          }}
+          classNames={{
+            control: (state) => {
+              let base = "transition-colors border-default-200 hover:border-default-400 border-medium rounded-medium h-14";
+
+              if(state.menuIsOpen || state.isFocused) {
+                base = '!border-foreground '.concat(base);
+              }
+
+              return base;
+            },
+          }}
         />
       )}
     />

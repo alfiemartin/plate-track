@@ -28,7 +28,7 @@ export default function RootLayout({
         <UIProvider>
           <div className="flex flex-col justify-between min-h-screen">
             <Header />
-            <main className="container mx-auto flex-1 mt-16">
+            <main className="container mx-auto flex-1 py-16">
               {children}
             </main>
             <Footer />
