@@ -1,12 +1,22 @@
-import type { NextRequest } from 'next/server'
-import { getCarApiToken } from './app/services/carapi';
-
-export let carToken: string | undefined;
+import { NextRequest, NextResponse } from 'next/server'
+import { getCarApiToken } from './services/carapi'
 
 export async function middleware(request: NextRequest) {
-  carToken = await getCarApiToken();
+  const token = request.cookies.get('carApiToken')?.value ?? await getCarApiToken();
+
+  const response = NextResponse.next();
+  response.cookies.set({
+    name: 'carApiToken',
+    value: token,
+    path: '/',
+    httpOnly: true,
+  });
+  
+  response.headers.set('Authorization', token);
+
+  return response;
 }
  
 export const config = {
-  matcher: '/api/:path*',
+  matcher: ['/submit-details/'],
 }

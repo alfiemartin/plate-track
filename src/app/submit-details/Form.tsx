@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { CarMakesResponse, CarModelsResponse } from "../services/carapi";
+import { CarMakesResponse, CarModelsResponse } from "../../services/carapi";
 import { useForm } from "react-hook-form";
 import ControlledInput from "@/components/forms/Input/ControlledInput";
 import ControlledSelect, {
   Option,
+  yupSelectOption,
 } from "@/components/forms/Select/ControlledSelect";
-import * as yup from "yup";
+import { string, object } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -25,15 +25,10 @@ interface CarModel {
   value: string;
 }
 
-const yupOption = yup.object().shape({
-  label: yup.string().required(),
-  value: yup.string().required(),
-});
-
-const schema = yup.object().shape({
-  carPlateNumber: yup.string().email().required(),
-  carMake: yupOption,
-  carModel: yupOption,
+const schema = object().shape({
+  carPlateNumber: string().required(),
+  carMake: yupSelectOption,
+  carModel: yupSelectOption,
 });
 
 const Form = ({ carMakes }: FormProps) => {
@@ -42,8 +37,8 @@ const Form = ({ carMakes }: FormProps) => {
       carPlateNumber: "",
     },
     mode: "onChange",
-    reValidateMode: 'onChange',
-    resolver: yupResolver(schema) ,
+    reValidateMode: "onChange",
+    resolver: yupResolver(schema),
   });
 
   const [carModels, setCarModels] = useState<CarModel[]>();
@@ -51,11 +46,10 @@ const Form = ({ carMakes }: FormProps) => {
   const carMake = watch("carMake");
 
   useEffect(() => {
-    console.log(formState);
     (async () => {
       if (carMake?.value) {
-        setCarModels([]);
-        resetField('carModel')
+        setCarModels(undefined);
+        resetField("carModel");
         const models: CarModelsResponse["data"] = await (
           await fetch(`/api/cars/models?make=${carMake.value}`)
         ).json();
@@ -71,7 +65,11 @@ const Form = ({ carMakes }: FormProps) => {
         name="carPlateNumber"
         label="Car number plate"
         labelPlacement="inside"
-        errorMessage={formState.dirtyFields.carPlateNumber && <>{formState.errors.carPlateNumber?.message}</>}
+        errorMessage={
+          formState.dirtyFields.carPlateNumber && (
+            <>{formState.errors.carPlateNumber?.message}</>
+          )
+        }
       />
       <ControlledSelect
         control={control}
@@ -83,6 +81,7 @@ const Form = ({ carMakes }: FormProps) => {
         control={control}
         name="carModel"
         placeholder="Model"
+        isLoading={!!!carModels && !!formState.dirtyFields.carMake}
         options={carModels}
       />
     </form>

@@ -1,5 +1,13 @@
+export interface CarMakesResponse {
+  data: { id: number; name: string }[];
+}
+
+export interface CarModelsResponse {
+  data: [{ id: number; make_id: string; name: string }];
+}
+
 const getCarApiToken = async () => {
-  const response = await fetch(`${process.env.CARAPI_URI!}/api/auth/login`, {
+  const response = await fetch(`${process.env.CARAPI_URI!}api/auth/login`, {
     method: "POST",
     headers: {
       accept: "text/plain",
@@ -12,23 +20,17 @@ const getCarApiToken = async () => {
     }),
   });
 
+  console.log('token created');
+  
   const token = await response.text();
   return token;
 };
-
-export interface CarMakesResponse {
-  data: { id: number; name: string }[];
-}
-
-export interface CarModelsResponse {
-  data: [{ id: number; make_id: string; name: string }];
-}
 
 const carFetch = (url: string, token: string, method = "GET") =>
   fetch(`${process.env.CARAPI_URI!}${url}`, {
     method,
     headers: {
-      Authorisation: token,
+      Authorization: token,
     },
     cache: "force-cache",
   });
