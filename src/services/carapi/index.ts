@@ -20,6 +20,7 @@ const getCarApiToken = async () => {
     }),
   });
 
+  console.log(response.status, response.statusText);
   console.log("token created");
 
   const token = await response.text();
