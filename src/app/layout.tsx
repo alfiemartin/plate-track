@@ -4,7 +4,7 @@ import { Roboto } from "next/font/google";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
-import { apiKey } from '../lib/test';
+import { carApiKey } from '../lib/test';
 import { useCallback } from "react";
 
 const font = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] });
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {  
 
-  useCallback(() => apiKey(), [])()
+  useCallback(() => carApiKey(), [])()
 
   return (
     <html className="light text-foreground bg-background" lang="en">

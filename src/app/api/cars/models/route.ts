@@ -7,7 +7,7 @@ export async function GET(Request: NextRequest) {
 
   const carMake = Request.nextUrl.searchParams.get("make");
   const carModelsResponse = await getCarModels(
-    ctx.carApiKey,
+    ctx.carcarApiKey,
     carMake ?? "ford"
   );
 
