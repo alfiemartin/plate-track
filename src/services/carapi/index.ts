@@ -20,27 +20,27 @@ const getCarApiToken = async () => {
     }),
   });
 
-  console.log('token created');
-  
+  console.log("token created");
+
   const token = await response.text();
   return token;
 };
 
 const carFetch = async (url: string, token: string, method = "GET") => {
-  const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
-    method,
-    headers: {
-      Authorization: token,
-    },
-    cache: "force-cache",
-  });
+  try {
+    const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
+      method,
+      headers: {
+        Authorization: token,
+      },
+      cache: "force-cache",
+    });
 
-  if(response.status !== 200) {
-    throw new Error(`JWT Expired probs, ${response.status}`);
+    return response;
+  } catch (e) {
+    throw new Error(`JWT Expired probs`, e);
   }
-
-  return response;
-}
+};
 
 const getCarMakes = async (token: string) => {
   const response = await carFetch("api/makes", token);

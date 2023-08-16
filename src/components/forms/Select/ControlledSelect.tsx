@@ -47,7 +47,7 @@ const ControlledSelect = ({
           styles={{
             control: (base, state) => ({
               ...base,
-              borderWidth:  undefined,
+              borderWidth: undefined,
               borderColor: undefined,
               borderRadius: undefined,
               boxShadow: undefined,
@@ -56,15 +56,16 @@ const ControlledSelect = ({
               "&:hover": {
                 outline: undefined,
                 borderColor: undefined,
-              }
-            })
+              },
+            }),
           }}
           classNames={{
             control: (state) => {
-              let base = "transition-colors border-default-200 hover:border-default-400 border-medium rounded-medium h-14";
+              let base =
+                "transition-colors border-default-200 hover:border-default-400 border-medium rounded-medium h-14";
 
-              if(state.menuIsOpen || state.isFocused) {
-                base = '!border-foreground '.concat(base);
+              if (state.menuIsOpen || state.isFocused) {
+                base = "!border-foreground ".concat(base);
               }
 
               return base;
