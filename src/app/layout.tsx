@@ -4,7 +4,6 @@ import { Roboto } from "next/font/google";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "./nextui";
-import { getServerContext } from "@/context";
 
 const font = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] });
 
@@ -18,15 +17,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  getServerContext();
-
   return (
     <html className="light text-foreground bg-background" lang="en">
       <body className={font.className}>
         <UIProvider>
           <div className="flex flex-col justify-between min-h-screen">
             <Header />
-            <main className="container mx-auto flex-1 mt-4">
+            <main className="container mx-auto flex-1 mt-16">
               {children}
             </main>
             <Footer />

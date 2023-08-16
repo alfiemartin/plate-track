@@ -1,17 +1,9 @@
 import React from "react";
 import Form from "./Form";
-import { getCarMakes } from "@/services/carapi";
-import { headers } from "next/headers";
-import { getServerContext } from "@/context";
+import { getCarApiToken, getCarMakes } from "@/services/carapi";
 
 export default async function SubmitDetails(...props: unknown[]) {
-  const carApiToken = headers().get('Authorization');
-
-  const ctx = getServerContext();
-  console.log(ctx.user);
-
-  if(!carApiToken) return <>error</>
-
+  const carApiToken = await getCarApiToken();
   const carMakes = await getCarMakes(carApiToken);
 
   return (
