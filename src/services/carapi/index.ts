@@ -38,7 +38,8 @@ const carFetch = async (url: string, token: string, method = "GET") => {
 
     return response;
   } catch (e) {
-    throw new Error(`JWT Expired probs`, e);
+    console.log(e);
+    throw new Error('Failed to fetch');
   }
 };
 
