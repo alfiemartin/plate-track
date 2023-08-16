@@ -8,8 +8,6 @@ const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-
-// running the app, async operation 
 app.prepare().then(() => {
   const server = express()
   

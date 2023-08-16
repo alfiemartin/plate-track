@@ -49,4 +49,4 @@ const getCarModels = async (token: string, make: string) => {
   return models;
 };
 
-export { getCarApiToken, getCarMakes, getCarModels };
+export { getCarApiToken, getCarMakes, getCarModels, carFetch };
