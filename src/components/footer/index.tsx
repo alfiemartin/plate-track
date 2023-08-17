@@ -4,13 +4,13 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="w-full shadow bg-primary-300 text-xs">
+    <footer className="w-full shadow bg-primary-600 text-default-200 text-xs">
       <div className="container mx-auto p-4">
         <p className="font-bold">
           This service, designed to aid witnesses in connecting with victims,
           operates under the following terms and conditions:
         </p>
-        <Divider className="mb-2" />
+        <Divider className="mb-2 bg-default-400" />
         <p>
           <span className="font-bold">User Submitted Data:</span> Users may
           voluntarily submit data about a car based on its registration plate to

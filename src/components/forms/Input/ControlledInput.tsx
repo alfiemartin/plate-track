@@ -1,11 +1,12 @@
+import { FormInputs } from "@/app/submit-details/form";
 import { Input, InputProps } from "@nextui-org/react";
 import React from "react";
-import { Controller } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 
 interface ControlledInputProps extends InputProps {
   name: string;
   label: string;
-  control: any;
+  control: Control<FormInputs, any>;
 }
 
 const ControlledInput = ({
@@ -15,7 +16,7 @@ const ControlledInput = ({
   ...inputProps
 }: ControlledInputProps) => (
   <Controller
-    name={name}
+    name={name as keyof FormInputs}
     defaultValue={""}
     control={control}
     render={({ field }) => (

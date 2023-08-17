@@ -46,6 +46,10 @@ const ControlledSelect = ({
             <label className="text-sm px-1">{value}</label>
           )}
           styles={{
+            menu: (base) =>  ({
+              ...base,
+              zIndex: 11,
+            }),
             control: (base, state) => ({
               ...base,
               borderWidth: undefined,
