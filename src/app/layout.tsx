@@ -5,7 +5,6 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
 import { carApiKey } from "../lib/carApiKey";
-import { useCallback, useState } from "react";
 
 const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
