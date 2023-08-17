@@ -5,7 +5,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
 import { carApiKey } from "../lib/carApiKey";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -19,8 +19,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [apiKey, setApiKey] = useState('')
+  useCallback(() => {
+    (async () => {
+      await carApiKey();
+      setApiKey(globalThis.carApiKey);
+    })()
+  }, [])
 
-  useCallback(() => carApiKey(), [])
+  if(!globalThis.carApiKey) return <>loading</>
 
   return (
     <html className="light text-foreground bg-background" lang="en">
