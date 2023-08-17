@@ -20,7 +20,6 @@ export default function RootLayout({
 }) {
   carApiKey();
 
-
   return (
     <html className="light text-foreground bg-background" lang="en">
       <body className={font.className}>
