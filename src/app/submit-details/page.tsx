@@ -1,6 +1,5 @@
 import React from "react";
 import { getCarMakes } from "@/services/carapi";
-import "react-datepicker/dist/react-datepicker.css";
 import MainForm from "./main-form";
 
 

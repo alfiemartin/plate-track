@@ -9,7 +9,7 @@ import ControlledSelect, {
 } from "@/components/forms/Select/ControlledSelect";
 import { string, object, date } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-// import ControlledDatepicker from "@/components/forms/DatePicker/date-picker";
+import ControlledDatepicker from "@/components/forms/DatePicker/date-picker";
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -91,7 +91,7 @@ const MainForm = ({ carMakes }: FormProps) => {
           isLoading={!!!carModels && !!formState.dirtyFields.carMake}
           options={carModels}
         />
-        {/* <ControlledDatepicker
+        <ControlledDatepicker
           name='dateOfAccident'
           label="Date of accident"
           labelPlacement="inside"
@@ -100,7 +100,7 @@ const MainForm = ({ carMakes }: FormProps) => {
               <>{formState.errors.carPlateNumber?.message}</>
             )
           }
-        /> */}
+        />
       </form>
     </FormProvider>
   );
