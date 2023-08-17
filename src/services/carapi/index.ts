@@ -7,6 +7,8 @@ export interface CarModelsResponse {
 }
 
 const getCarApiToken = async () => {
+  globalThis.logger?.info('Fetched new token');
+
   const response = await fetch(`${process.env.CARAPI_URI!}api/auth/login`, {
     method: "POST",
     headers: {
