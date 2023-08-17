@@ -13,4 +13,5 @@ const SetupCarApi = ({ children }: { children?: ReactNode }) => {
 
 export default SetupCarApi;
 
+//we need to run this code for each request -- so we have the car api key in the global scope;
 export const revalidate = 0;
