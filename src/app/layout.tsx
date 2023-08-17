@@ -4,10 +4,10 @@ import { Roboto } from "next/font/google";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
-import { carApiKey } from '../lib/test';
-import { useCallback } from "react";
+import { carApiKey } from "../lib/carApiKey";
+import { useCallback, useState } from "react";
 
-const font = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] });
+const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: "Plate track",
@@ -18,9 +18,9 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {  
+}) {
+  carApiKey();
 
-  useCallback(() => carApiKey(), [])()
 
   return (
     <html className="light text-foreground bg-background" lang="en">
@@ -38,3 +38,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const revalidate = 0;

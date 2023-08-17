@@ -41,6 +41,7 @@ const ControlledSelect = ({
           placeholder={<label className="text-sm px-1">{placeholder}</label>}
           isLoading={isLoading}
           isDisabled={!options}
+          isSearchable={false}
           formatOptionLabel={({ value }) => (
             <label className="text-sm px-1">{value}</label>
           )}
