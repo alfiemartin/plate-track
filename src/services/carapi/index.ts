@@ -13,7 +13,6 @@ const getCarApiToken = async () => {
       accept: "text/plain",
       "Content-Type": "application/json",
     },
-    cache: "no-store",
     body: JSON.stringify({
       api_token: process.env.CARAPI_TOKEN,
       api_secret: process.env.CARAPI_SECRET,
