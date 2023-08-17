@@ -1,11 +1,11 @@
 import { InputProps, Input } from "@nextui-org/react";
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import DatePicker from "react-datepicker";
-import { FormInputs, FormNames } from "@/app/submit-details/form";
 
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import { FormInputs, FormNames } from "../../../app/submit-details/form";
 
 interface ControlledDatePickerProps extends InputProps {
   name: FormNames;
