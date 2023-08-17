@@ -1,7 +1,7 @@
 import React from "react";
 import { getCarMakes } from "@/services/carapi";
 import "react-datepicker/dist/react-datepicker.css";
-import { Form } from "./form";
+// import { Form } from "./form";
 
 
 export default async function SubmitDetails() {
@@ -9,7 +9,7 @@ export default async function SubmitDetails() {
 
   return (
     <section>
-      <Form carMakes={carMakes.data} />
+      {/* <Form carMakes={carMakes.data} /> */}
     </section>
   );
 }
