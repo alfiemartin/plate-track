@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { FormInputs, FormNames } from "../../../app/submit-details/form";
+import { FormInputs, FormNames } from "../../../app/submit-details/main-form";
 
 interface ControlledDatePickerProps extends InputProps {
   name: FormNames;

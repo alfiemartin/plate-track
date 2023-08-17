@@ -36,7 +36,7 @@ const schema = object().shape({
   dateOfAccident: date().optional()
 });
 
-const Form = ({ carMakes }: FormProps) => {
+const MainForm = ({ carMakes }: FormProps) => {
   const methods = useForm<FormInputs>({
     defaultValues: {
     },
@@ -106,4 +106,4 @@ const Form = ({ carMakes }: FormProps) => {
   );
 };
 
-export { Form };
+export default MainForm;
