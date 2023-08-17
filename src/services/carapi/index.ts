@@ -20,7 +20,7 @@ const getCarApiToken = async () => {
     }),
   });
 
-  globalThis.logger.error("Car token getter", response.status);
+  globalThis?.logger?.error("Car token getter", response.status);
 
   const token = await response.text();
   return token;
@@ -36,7 +36,7 @@ const carFetch = async (url: string, token: string, method = "GET") => {
   });
 
   if (!response.ok) {
-    globalThis.logger.error("Failed to fetch car api", response.status);
+    globalThis?.logger?.error("Failed to fetch car api", response.status);
     throw new Error("Failed to fetch");
   }
 

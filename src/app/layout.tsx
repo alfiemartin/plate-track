@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 declare global {
-  var logger: Logger;
+  var logger: Logger | undefined;
 }
 
 export default function RootLayout({
