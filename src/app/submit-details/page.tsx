@@ -7,7 +7,7 @@ export default async function SubmitDetails() {
 
   return (
     <section>
-      <Form carMakes={carMakes.data} />
+      {/* <Form carMakes={carMakes.data} /> */}
     </section>
   );
 }
