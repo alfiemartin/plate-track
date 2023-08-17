@@ -4,10 +4,10 @@ import { Roboto } from "next/font/google";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
-import { carApiKey } from '../lib/test';
+import { carApiKey } from "../lib/carApiKey";
 import { useCallback } from "react";
 
-const font = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] });
+const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: "Plate track",
