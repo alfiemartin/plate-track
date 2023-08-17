@@ -91,7 +91,7 @@ const Form = ({ carMakes }: FormProps) => {
           isLoading={!!!carModels && !!formState.dirtyFields.carMake}
           options={carModels}
         />
-        <ControlledDatepicker
+        {/* <ControlledDatepicker
           name='dateOfAccident'
           label="Date of accident"
           labelPlacement="inside"
@@ -100,7 +100,7 @@ const Form = ({ carMakes }: FormProps) => {
               <>{formState.errors.carPlateNumber?.message}</>
             )
           }
-        />
+        /> */}
       </form>
     </FormProvider>
   );
