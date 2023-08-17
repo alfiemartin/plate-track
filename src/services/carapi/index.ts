@@ -20,7 +20,10 @@ const getCarApiToken = async () => {
     }),
   });
 
-  globalThis.logger?.error("Car token getter", response.status);
+  if(response.status !== 200) {
+    globalThis.logger?.error("Car token getter", response.status);
+    throw new Error('Failed to get car api token')
+  }
 
   const token = await response.text();
   return token;
