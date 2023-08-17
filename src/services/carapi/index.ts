@@ -20,7 +20,7 @@ const getCarApiToken = async () => {
     }),
   });
 
-  globalThis?.logger?.error("Car token getter", response.status);
+  globalThis.logger?.error("Car token getter", response.status);
 
   const token = await response.text();
   return token;

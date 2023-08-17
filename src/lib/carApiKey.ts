@@ -5,6 +5,6 @@ import { getCarApiToken } from "@/services/carapi";
 }
 
 export const carApiKey = async () => {
-  console.log('token refreshed by singleton')
+  globalThis.logger?.info('token refreshed by singleton')
   globalThis.carApiKey = globalThis.carApiKey ?? await getCarApiToken();
 };
