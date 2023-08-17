@@ -6,6 +6,7 @@ import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
 import { carApiKey } from "../lib/carApiKey";
 import { useCallback } from "react";
+import SetupCarApi from "@/providers/car-api/CarApi";
 
 const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -18,10 +19,7 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {  
-
-  useCallback(() => carApiKey(), [])()
-
+}) {
   return (
     <html className="light text-foreground bg-background" lang="en">
       <body className={font.className}>
@@ -29,6 +27,7 @@ export default function RootLayout({
           <div className="flex flex-col justify-between min-h-screen">
             <Header />
             <main className="container mx-auto flex-1 py-16">
+              <SetupCarApi />
               {children}
             </main>
             <Footer />
@@ -38,5 +37,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-export const revalidate = 0;
