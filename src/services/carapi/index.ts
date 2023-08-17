@@ -20,24 +20,27 @@ const getCarApiToken = async () => {
     }),
   });
 
-  console.log("token created");
+  globalThis.logger.error("Car token getter", response.status);
 
   const token = await response.text();
   return token;
 };
 
 const carFetch = async (url: string, token: string, method = "GET") => {
-    const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
-      method,
-      headers: {
-        Authorization: token ?? await getCarApiToken(),
-      },
-      cache: "force-cache",
-    })
+  const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
+    method,
+    headers: {
+      Authorization: token ?? (await getCarApiToken()),
+    },
+    cache: "force-cache",
+  });
 
-    if(!response.ok) throw new Error('Failed to fetch');
+  if (!response.ok) {
+    globalThis.logger.error("Failed to fetch car api", response.status);
+    throw new Error("Failed to fetch");
+  }
 
-    return response.json();
+  return response.json();
 };
 
 const getCarMakes = async (token: string) => {

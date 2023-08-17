@@ -4,6 +4,7 @@ import { getCarMakes } from "@/services/carapi";
 
 export default async function SubmitDetails() {
   const carMakes = await getCarMakes(globalThis.carApiKey);
+  logger.info('Submit Details Page');
 
   return (
     <section>

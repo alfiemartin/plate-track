@@ -5,6 +5,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
 import { carApiKey } from "../lib/carApiKey";
+import logger, { Logger } from 'pino';
 
 const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -13,12 +14,17 @@ export const metadata: Metadata = {
   description: "Get help, help others",
 };
 
+declare global {
+  var logger: Logger;
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   carApiKey();
+  globalThis.logger = globalThis.logger ?? logger();
 
   return (
     <html className="light text-foreground bg-background" lang="en">
