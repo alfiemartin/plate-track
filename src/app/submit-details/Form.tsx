@@ -106,4 +106,4 @@ const Form = ({ carMakes }: FormProps) => {
   );
 };
 
-export default Form;
+export { Form };
