@@ -20,8 +20,7 @@ const ControlledInput = ({
   const { control } = useFormContext<FormInputs>();
 
   const {
-    field: { name: fieldName, value, onChange },
-    fieldState: { invalid, isDirty, error },
+    field
   } = useController({
     name,
     control,
@@ -39,6 +38,7 @@ const ControlledInput = ({
     <>
       {isCheckboxGuarded && (
         <Checkbox
+          className="pb-0"
           onChange={(e) => setChecked(e.target.checked)}
           checked={checked}
         >
@@ -47,12 +47,12 @@ const ControlledInput = ({
       )}
       <Input
         {...inputProps}
+        {...field}
+        value={field.value as string}
         className={isDisabled ? "disabled-input" : "enabled-input"}
         errorMessage={<p>{inputProps.errorMessage}</p>}
+        defaultValue=""
         disabled={isDisabled}
-        name={fieldName}
-        onChange={(e) => onChange(e.target.value)}
-        value={value as string ?? ''}
         variant="bordered"
         label={label}
       />

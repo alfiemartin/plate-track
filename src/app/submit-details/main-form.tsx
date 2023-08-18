@@ -16,7 +16,7 @@ interface FormProps {
 }
 
 export interface FormInputs {
-  carPlateNumber: string | undefined;
+  carPlateNumber: string;
   carMake: Option | undefined;
   carModel: Option | undefined;
   dateOfAccident: Date | undefined;
@@ -36,7 +36,7 @@ interface CarModel {
 }
 
 const schema = object().shape({
-  carPlateNumber: string().optional(),
+  carPlateNumber: string().required(),
   carMake: yupSelectOption.optional(),
   carModel: yupSelectOption.optional(),
   dateOfAccident: date().optional(),
@@ -74,6 +74,10 @@ const MainForm = ({ carMakes }: FormProps) => {
       }
     })();
   }, [carMake]);
+
+  useEffect(() => {
+    console.log(methods.getValues())
+  }, [methods.formState])
 
   return (
     <FormProvider {...methods}>
