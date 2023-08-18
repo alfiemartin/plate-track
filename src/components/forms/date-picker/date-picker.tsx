@@ -75,6 +75,7 @@ const ControlledDatepicker = ({
           {...inputProps}
           variant="bordered"
           label={label}
+          errorMessage={<p>{inputProps.errorMessage}</p>}
           value={value?.toString()}
         />
       }

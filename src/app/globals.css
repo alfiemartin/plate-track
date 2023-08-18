@@ -6,4 +6,8 @@
   .react-datepicker {
     @apply !border-default-400 !border-2
   }
+  
+  .disabled-input > div:first-child {
+    @apply !bg-default-100
+  }
 }

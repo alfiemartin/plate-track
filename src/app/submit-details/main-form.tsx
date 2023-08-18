@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { CarMakesResponse, CarModelsResponse } from "../../services/carapi";
 import { FormProvider, useForm } from "react-hook-form";
-import ControlledInput from "@/components/forms/Input/controlled-input";
+import ControlledInput from "@/components/forms/input/controlled-input";
 import ControlledSelect, {
   Option,
   yupSelectOption,
-} from "@/components/forms/Select/controlled-select";
-import { string, object, date } from "yup";
+} from "@/components/forms/select/controlled-select";
+import { string, object, date, number } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
 
@@ -22,6 +22,10 @@ export interface FormInputs {
   dateOfAccident: Date | undefined;
   startDateOfAccident: Date | undefined;
   endDateOfAccident: Date | undefined;
+  streetName: string | undefined;
+  postalCode: string | undefined;
+  numberInvolved: number | undefined;
+  contactPhoneNumber: string | undefined;
 }
 
 export type FormNames = keyof FormInputs;
@@ -38,12 +42,15 @@ const schema = object().shape({
   dateOfAccident: date().optional(),
   startDateOfAccident: date().optional(),
   endDateOfAccident: date().optional(),
+  streetName: string().optional(),
+  postalCode: string().optional(),
+  numberInvolved: number().optional(),
+  contactPhoneNumber: string().optional(),
 });
 
 const MainForm = ({ carMakes }: FormProps) => {
   const methods = useForm<FormInputs>({
-    defaultValues: {
-    },
+    defaultValues: {},
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
@@ -69,19 +76,13 @@ const MainForm = ({ carMakes }: FormProps) => {
   }, [carMake]);
 
   return (
-    <FormProvider {...methods} >
+    <FormProvider {...methods}>
       <form className="w-full px-2 sm:px-0 sm:w-96 mx-auto flex flex-col gap-4">
         <ControlledInput
-          control={control}
           name="carPlateNumber"
           id="carPlateNumber"
           label="Car number plate"
           labelPlacement="inside"
-          errorMessage={
-            formState.errors.carPlateNumber?.message && (
-              <>{formState.errors.carPlateNumber?.message}</>
-            )
-          }
         />
         <ControlledSelect
           control={control}
@@ -99,42 +100,51 @@ const MainForm = ({ carMakes }: FormProps) => {
           options={carModels}
         />
         <ControlledDatepicker
-          name='dateOfAccident'
+          name="dateOfAccident"
           id="dateOfAccident"
           label="Date of accident"
           labelPlacement="inside"
-          errorMessage={
-            formState.dirtyFields.carPlateNumber && (
-              <>{formState.errors.carPlateNumber?.message}</>
-            )
-          }
         />
         <div className="flex gap-2">
           <ControlledDatepicker
-            name='startDateOfAccident'
+            name="startDateOfAccident"
             id="timeStartOfAccident"
             isYearPicker
             label="Start time"
             labelPlacement="inside"
-            errorMessage={
-              formState.dirtyFields.carPlateNumber && (
-                <>{formState.errors.carPlateNumber?.message}</>
-              )
-            }
           />
           <ControlledDatepicker
-            name='endDateOfAccident'
+            name="endDateOfAccident"
             id="endDateOfAccident"
             isYearPicker
             label="End time"
             labelPlacement="inside"
-            errorMessage={
-              formState.dirtyFields.carPlateNumber && (
-                <>{formState.errors.carPlateNumber?.message}</>
-              )
-            }
           />
         </div>
+        <ControlledInput
+          name="streetName"
+          id="streetName"
+          label="Street name"
+          labelPlacement="inside"
+        />
+        <ControlledInput
+          name="postalCode"
+          id="postalCode"
+          label="Postal code"
+          labelPlacement="inside"
+        />
+        <ControlledInput
+          name="numberInvolved"
+          id="numberInvolved"
+          label="Number of cars in accident"
+          labelPlacement="inside"
+        />
+        <ControlledInput
+          name="contactPhoneNumber"
+          label="Phone number"
+          isCheckboxGuarded
+          checkboxLabel="Allow phone number?"
+        />
       </form>
     </FormProvider>
   );
