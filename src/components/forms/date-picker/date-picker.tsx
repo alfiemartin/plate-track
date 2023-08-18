@@ -6,7 +6,6 @@ import moment from "moment";
 import { FormInputs, FormNames } from "../../../app/submit-details/main-form";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 interface ControlledDatePickerProps extends InputProps {
   name: FormNames;
   label: string;
@@ -37,21 +36,46 @@ const ControlledDatepicker = ({
 
   return (
     <DatePicker
-      calendarClassName="absolute"
-      dateFormat={!isYearPicker ? "yyyy/MM/dd" : 'hh:mm'}
+      dateFormat={!isYearPicker ? "yyyy/MM/dd" : "hh:mm aa"}
       selected={value as Date}
       showYearDropdown={!isYearPicker}
       showTimeSelect={isYearPicker}
+      timeIntervals={isYearPicker ? 10 : undefined}
       showTimeSelectOnly={isYearPicker}
       minDate={moment().year(2018).toDate()}
       maxDate={new Date()}
       onChange={onChange}
+      wrapperClassName="flex-1"
+      popperClassName="!z-20"
+      popperPlacement="bottom-start"
+      className="z-20"
+      showPopperArrow={false}
+      popperModifiers={[
+        {
+          name: "offset",
+          options: {
+            offset: [0, 0],
+          },
+          enabled: true,
+        },
+        {
+          name: "preventOverflow",
+          options: {
+            altAxis: true,
+            padding: 40,
+          },
+          enabled: false
+        },
+      ]}
+      popperContainer={
+        ({ children }) => <div className="absolute">{children}</div>
+      }
       customInput={
-       <CustomInput
+        <CustomInput
           {...inputProps}
           variant="bordered"
           label={label}
-          value={value?.toString() + '  dfdsfdf'}
+          value={value?.toString()}
         />
       }
     />

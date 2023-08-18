@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { CarMakesResponse, CarModelsResponse } from "../../services/carapi";
 import { FormProvider, useForm } from "react-hook-form";
-import ControlledInput from "@/components/forms/Input/ControlledInput";
+import ControlledInput from "@/components/forms/Input/controlled-input";
 import ControlledSelect, {
   Option,
   yupSelectOption,
-} from "@/components/forms/Select/ControlledSelect";
+} from "@/components/forms/Select/controlled-select";
 import { string, object, date } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ControlledDatepicker from "@/components/forms/DatePicker/date-picker";
+import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -20,6 +20,8 @@ export interface FormInputs {
   carMake: Option | undefined;
   carModel: Option | undefined;
   dateOfAccident: Date | undefined;
+  startDateOfAccident: Date | undefined;
+  endDateOfAccident: Date | undefined;
 }
 
 export type FormNames = keyof FormInputs;
@@ -33,7 +35,9 @@ const schema = object().shape({
   carPlateNumber: string().optional(),
   carMake: yupSelectOption.optional(),
   carModel: yupSelectOption.optional(),
-  dateOfAccident: date().optional()
+  dateOfAccident: date().optional(),
+  startDateOfAccident: date().optional(),
+  endDateOfAccident: date().optional(),
 });
 
 const MainForm = ({ carMakes }: FormProps) => {
@@ -70,6 +74,7 @@ const MainForm = ({ carMakes }: FormProps) => {
         <ControlledInput
           control={control}
           name="carPlateNumber"
+          id="carPlateNumber"
           label="Car number plate"
           labelPlacement="inside"
           errorMessage={
@@ -81,18 +86,21 @@ const MainForm = ({ carMakes }: FormProps) => {
         <ControlledSelect
           control={control}
           name="carMake"
+          id="carMake"
           placeholder="Make"
           options={carMakes?.map((x) => ({ label: x.name, value: x.name }))}
         />
         <ControlledSelect
           control={control}
           name="carModel"
+          id="carModel"
           placeholder="Model"
           isLoading={!!!carModels && !!formState.dirtyFields.carMake}
           options={carModels}
         />
         <ControlledDatepicker
           name='dateOfAccident'
+          id="dateOfAccident"
           label="Date of accident"
           labelPlacement="inside"
           errorMessage={
@@ -101,6 +109,32 @@ const MainForm = ({ carMakes }: FormProps) => {
             )
           }
         />
+        <div className="flex gap-2">
+          <ControlledDatepicker
+            name='startDateOfAccident'
+            id="timeStartOfAccident"
+            isYearPicker
+            label="Start time"
+            labelPlacement="inside"
+            errorMessage={
+              formState.dirtyFields.carPlateNumber && (
+                <>{formState.errors.carPlateNumber?.message}</>
+              )
+            }
+          />
+          <ControlledDatepicker
+            name='endDateOfAccident'
+            id="endDateOfAccident"
+            isYearPicker
+            label="End time"
+            labelPlacement="inside"
+            errorMessage={
+              formState.dirtyFields.carPlateNumber && (
+                <>{formState.errors.carPlateNumber?.message}</>
+              )
+            }
+          />
+        </div>
       </form>
     </FormProvider>
   );

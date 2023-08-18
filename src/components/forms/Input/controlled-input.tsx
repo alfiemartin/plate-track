@@ -20,7 +20,7 @@ const ControlledInput = ({
     defaultValue={""}
     control={control}
     render={({ field }) => (
-      <Input {...field} value={(field.value as string).toUpperCase()} variant="bordered" label={label} {...inputProps} />
+      <Input {...field} {...inputProps} value={(field.value as string).toUpperCase()} variant="bordered" label={label}  />
     )}
   />
 );
