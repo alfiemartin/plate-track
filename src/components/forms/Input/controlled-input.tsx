@@ -51,7 +51,6 @@ const ControlledInput = ({
         value={field.value as string}
         className={isDisabled ? "disabled-input" : "enabled-input"}
         errorMessage={<p>{inputProps.errorMessage}</p>}
-        defaultValue=""
         disabled={isDisabled}
         variant="bordered"
         label={label}

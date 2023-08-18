@@ -50,7 +50,9 @@ const schema = object().shape({
 
 const MainForm = ({ carMakes }: FormProps) => {
   const methods = useForm<FormInputs>({
-    defaultValues: {},
+    defaultValues: {
+      carPlateNumber: '',
+    },
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
@@ -61,6 +63,7 @@ const MainForm = ({ carMakes }: FormProps) => {
   const [carModels, setCarModels] = useState<CarModel[]>();
 
   const carMake = watch("carMake");
+  const carPlate = watch("carPlateNumber");
 
   useEffect(() => {
     (async () => {
@@ -77,7 +80,7 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   useEffect(() => {
     console.log(methods.getValues())
-  }, [methods.formState])
+  }, [carPlate])
 
   return (
     <FormProvider {...methods}>
