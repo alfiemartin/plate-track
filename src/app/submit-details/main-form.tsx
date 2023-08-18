@@ -7,9 +7,10 @@ import ControlledSelect, {
   Option,
   yupSelectOption,
 } from "@/components/forms/select/controlled-select";
-import { string, object, date, number } from "yup";
+import { string, object, date, number, boolean } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
+import ControlledTextArea from '@/components/forms/text-area/controlled-textarea';
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -24,8 +25,11 @@ export interface FormInputs {
   endDateOfAccident: Date | undefined;
   streetName: string | undefined;
   postalCode: string | undefined;
-  numberInvolved: number | undefined;
+  numberInvolved: string | undefined;
   contactPhoneNumber: string | undefined;
+  contactEmail: string | undefined;
+  requestContact: boolean | undefined;
+  message: string | undefined;
 }
 
 export type FormNames = keyof FormInputs;
@@ -44,14 +48,21 @@ const schema = object().shape({
   endDateOfAccident: date().optional(),
   streetName: string().optional(),
   postalCode: string().optional(),
-  numberInvolved: number().optional(),
+  numberInvolved: string().optional(),
   contactPhoneNumber: string().optional(),
+  contactEmail: string().optional(),
+  message: string().optional(),
+  requestContact: boolean().optional(),
 });
 
 const MainForm = ({ carMakes }: FormProps) => {
   const methods = useForm<FormInputs>({
     defaultValues: {
-      carPlateNumber: '',
+      carPlateNumber: "",
+      message: "",
+      contactEmail: "",
+      contactPhoneNumber: "",
+      numberInvolved: ""
     },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -79,12 +90,12 @@ const MainForm = ({ carMakes }: FormProps) => {
   }, [carMake]);
 
   useEffect(() => {
-    console.log(methods.getValues())
-  }, [carPlate])
+    console.log(methods.getValues());
+  }, [carPlate]);
 
   return (
     <FormProvider {...methods}>
-      <form className="w-full px-2 sm:px-0 sm:w-96 mx-auto flex flex-col gap-4">
+      <form className="w-full sm:w-96 mx-auto flex flex-col gap-4">
         <ControlledInput
           name="carPlateNumber"
           id="carPlateNumber"
@@ -151,6 +162,16 @@ const MainForm = ({ carMakes }: FormProps) => {
           label="Phone number"
           isCheckboxGuarded
           checkboxLabel="Allow phone number?"
+        />
+        <ControlledInput
+          name="contactEmail"
+          label="Email address"
+          isCheckboxGuarded
+          checkboxLabel="Allow email address?"
+        />
+        <ControlledTextArea 
+          name="message"
+          label="Message for victim"
         />
       </form>
     </FormProvider>

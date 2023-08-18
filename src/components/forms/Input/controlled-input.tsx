@@ -1,6 +1,6 @@
 import { FormInputs, FormNames } from "@/app/submit-details/main-form";
 import { Checkbox, Input, InputProps } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useController, useFormContext } from "react-hook-form";
 
 interface ControlledInputProps extends InputProps {
@@ -17,7 +17,7 @@ const ControlledInput = ({
   checkboxLabel,
   ...inputProps
 }: ControlledInputProps) => {
-  const { control } = useFormContext<FormInputs>();
+  const { control, setValue, trigger } = useFormContext<FormInputs>();
 
   const {
     field
@@ -33,6 +33,12 @@ const ControlledInput = ({
     : isCheckboxGuarded
     ? !checked
     : false;
+
+    useEffect(() => {
+      if(isDisabled && isCheckboxGuarded) {
+        setValue(name, '');
+      }
+    }, [isDisabled])
 
   return (
     <>

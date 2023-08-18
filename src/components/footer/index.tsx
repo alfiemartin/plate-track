@@ -4,7 +4,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="w-full shadow bg-primary-600 text-default-200 text-xs">
+    <footer className="w-full shadow bg-foreground text-default-200 text-xs">
       <div className="container mx-auto p-4">
         <p className="font-bold">
           This service, designed to aid witnesses in connecting with victims,

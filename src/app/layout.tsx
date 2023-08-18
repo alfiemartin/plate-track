@@ -32,7 +32,7 @@ export default function RootLayout({
         <UIProvider>
           <div className="flex flex-col justify-between min-h-screen">
             <Header />
-            <main className="container mx-auto flex-1 py-16">
+            <main className="container mx-auto py-8 px-2 sm:px-0">
               {children}
             </main>
             <Footer />
