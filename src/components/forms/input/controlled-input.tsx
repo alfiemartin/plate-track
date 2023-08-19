@@ -55,6 +55,7 @@ const ControlledInput = ({
         {...inputProps}
         {...field}
         value={field.value as string}
+        classNames={{ input: 'text-medium' }}
         className={isDisabled ? "disabled-input" : "enabled-input"}
         errorMessage={<p>{inputProps.errorMessage}</p>}
         disabled={isDisabled}

@@ -45,7 +45,7 @@ const ControlledSelect = ({
           isDisabled={!options}
           isSearchable={false}
           formatOptionLabel={({ value }) => (
-            <label htmlFor={name} className="text-sm px-1">{value}</label>
+            <label htmlFor={name} className="text-medium px-1">{value}</label>
           )}
           styles={{
             menu: (base) =>  ({

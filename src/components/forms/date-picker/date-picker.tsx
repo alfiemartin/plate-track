@@ -77,6 +77,7 @@ const ControlledDatepicker = ({
           {...inputProps}
           variant="bordered"
           label={label}
+          classNames={{ input: 'text-medium' }}
           errorMessage={<p>{inputProps.errorMessage}</p>}
           value={value?.toString()}
           endContent={<HiClock />}

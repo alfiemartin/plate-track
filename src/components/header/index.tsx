@@ -12,7 +12,7 @@ const Header = () => {
           <HiHome style={{ fill: "white", width: 50, height: 50 }} />
         </div>
       </Link>
-      <h1 className="text-center flex-1 col-start-4 text-xl self-center text-background">Plate Track</h1>
+      <h1 className="text-center flex-1 col-span-5 col-start-2 sm:col-start-3 sm:col-span-3 text-xl self-center text-background">Plate Track</h1>
     </header>
   );
 };
