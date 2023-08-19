@@ -7,7 +7,7 @@ import ControlledSelect, {
   Option,
   yupSelectOption,
 } from "@/components/forms/select/controlled-select";
-import { string, object, date, number, boolean } from "yup";
+import { string, object, date, boolean } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
 import ControlledTextArea from '@/components/forms/text-area/controlled-textarea';
