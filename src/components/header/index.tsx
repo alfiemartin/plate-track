@@ -7,7 +7,7 @@ import { HiHome } from "react-icons/hi";
 const Header = () => {
   return (
     <header className="bg-foreground shadow p-4 grid grid-cols-7">
-      <Link as={NextLink} href="/">
+      <Link as={NextLink} href="/" aria-label="Home">
         <div className="fill-background stroke-background">
           <HiHome style={{ fill: "white", width: 50, height: 50 }} />
         </div>

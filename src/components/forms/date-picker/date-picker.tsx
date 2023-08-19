@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import { FormInputs, FormNames } from "../../../app/submit-details/main-form";
 import "react-datepicker/dist/react-datepicker.css";
+import { HiClock } from 'react-icons/hi';
 
 interface ControlledDatePickerProps extends InputProps {
   name: FormNames;
@@ -43,6 +44,7 @@ const ControlledDatepicker = ({
       timeIntervals={isYearPicker ? 10 : undefined}
       showTimeSelectOnly={isYearPicker}
       minDate={moment().year(2018).toDate()}
+      startDate={moment().hours(8).toDate()}
       maxDate={new Date()}
       onChange={onChange}
       wrapperClassName="flex-1"
@@ -77,6 +79,7 @@ const ControlledDatepicker = ({
           label={label}
           errorMessage={<p>{inputProps.errorMessage}</p>}
           value={value?.toString()}
+          endContent={<HiClock />}
         />
       }
     />

@@ -62,7 +62,7 @@ const MainForm = ({ carMakes }: FormProps) => {
       message: "",
       contactEmail: "",
       contactPhoneNumber: "",
-      numberInvolved: ""
+      numberInvolved: "",
     },
     mode: "onChange",
     reValidateMode: "onChange",

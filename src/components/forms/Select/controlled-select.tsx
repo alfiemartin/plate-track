@@ -36,6 +36,8 @@ const ControlledSelect = ({
       render={({ field }) => (
         <ReactSelect
           {...field}
+          aria-label={name}
+          id={name}
           value={field.value?.value ? field.value : null}
           options={options}
           placeholder={<label className="text-sm px-1">{placeholder}</label>}
@@ -43,7 +45,7 @@ const ControlledSelect = ({
           isDisabled={!options}
           isSearchable={false}
           formatOptionLabel={({ value }) => (
-            <label className="text-sm px-1">{value}</label>
+            <label htmlFor={name} className="text-sm px-1">{value}</label>
           )}
           styles={{
             menu: (base) =>  ({
