@@ -31,13 +31,13 @@ const getCarApiToken = async () => {
   return token;
 };
 
-const carFetch = async (url: string, token: string, method = "GET") => {
+const carFetch = async (url: string, token: string, cache?: RequestCache, method = "GET") => {
   const response = await fetch(`${process.env.CARAPI_URI!}${url}`, {
     method,
     headers: {
       Authorization: token ?? (await getCarApiToken()),
     },
-    cache: "force-cache",
+    cache: cache ?? "force-cache",
   });
 
   if (!response.ok) {
