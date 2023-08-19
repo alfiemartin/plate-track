@@ -6,7 +6,7 @@ import ControlledInput from "@/components/forms/input/controlled-input";
 import ControlledSelect, {
   Option,
   yupSelectOption,
-} from "@/components/forms/select/xxx_controlled-select";
+} from "@/components/forms/select/controlled-select";
 import { string, object, date, boolean } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
