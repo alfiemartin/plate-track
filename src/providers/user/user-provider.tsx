@@ -1,4 +1,5 @@
 "use client";
+import { initFirebase } from "@/lib/firebase";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
@@ -19,6 +20,8 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
       setUser(user);
     });
   }, []);
+
+  initFirebase();
 
   return <UserContext.Provider value={{ user, setUser }}>
     {children}

@@ -11,14 +11,12 @@ import { string, object, date, boolean } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
 import ControlledTextArea from "@/components/forms/text-area/controlled-textarea";
-import { Button, Checkbox, Divider } from "@nextui-org/react";
+import { Checkbox, Divider } from "@nextui-org/react";
 import {
   GoogleAuthProvider,
   getAuth,
-  onAuthStateChanged,
   signInWithPopup,
 } from "firebase/auth";
-import { initFirebase } from "@/lib/firebase";
 import FileInput from "@/components/forms/file-uploader/file-uploder";
 import { useUserContext } from "@/providers/user/user-provider";
 interface FormProps {
@@ -64,7 +62,6 @@ const schema = object().shape({
   signedIn: boolean().required(),
 });
 
-initFirebase();
 const provider = new GoogleAuthProvider();
 
 const MainForm = ({ carMakes }: FormProps) => {
