@@ -22,7 +22,7 @@ const ControlledTextArea = ({
   });
 
   return (
-    <Textarea {...textAreaPops} onChange={field.onChange} value={field.value as string} />
+    <Textarea variant="bordered" {...textAreaPops} onChange={field.onChange} value={field.value as string} />
   );
 };
 

@@ -6,6 +6,7 @@ import Header from "../components/header";
 import { UIProvider } from "../components/nextui";
 import { carApiKey } from "../lib/carApiKey";
 import logger, { Logger } from 'pino';
+import UserProvider from "@/providers/user/user-provider";
 
 const font = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
@@ -30,13 +31,15 @@ export default function RootLayout({
     <html className="light text-foreground bg-background" lang="en">
       <body className={font.className}>
         <UIProvider>
-          <div className="flex flex-col justify-between min-h-screen">
-            <Header />
-            <main className="container mx-auto py-8 px-2 sm:px-0">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <UserProvider>
+            <div className="flex flex-col justify-between min-h-screen">
+              <Header />
+              <main className="container mx-auto py-8 px-2 sm:px-0">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </UserProvider>
         </UIProvider>
       </body>
     </html>
