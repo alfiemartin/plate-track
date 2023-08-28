@@ -1,6 +1,7 @@
 "use client";
 import { useUserContext } from "@/providers/user/user-provider";
-import { Link, User } from "@nextui-org/react";
+import { Button, Link, User } from "@nextui-org/react";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import NextLink from "next/link";
 import React, { useEffect, useState } from "react";
 import { HiHome } from "react-icons/hi";
@@ -25,7 +26,7 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   return (
     <>
@@ -42,11 +43,36 @@ const Header = () => {
             Plate Track
           </h1>
         </div>
-        <User
-          classNames={{ name: 'text-background' }}
-          name={user?.displayName}
-          avatarProps={{ src: user?.photoURL ?? undefined }}
-        />
+        <div className="flex items-center">
+          <User
+            classNames={{ name: "text-background" }}
+            rel="noreferrer"
+            name={user?.displayName}
+            avatarProps={{ src: user?.photoURL ?? undefined }}
+          />
+          {!user && (
+            <Button
+              variant="light"
+              className="text-background"
+              onClick={() => {
+                const auth = getAuth();
+                const provider = new GoogleAuthProvider();
+
+                signInWithPopup(auth, provider)
+                  .then((x) => {
+                    if (setUser) {
+                      setUser(x.user);
+                    }
+                  })
+                  .catch((error) => {
+                    alert("something went wrong");
+                  });
+              }}
+            >
+              Sign in
+            </Button>
+          )}
+        </div>
       </header>
       <div className="pb-[90px]"></div>
     </>

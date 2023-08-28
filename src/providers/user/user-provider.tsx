@@ -1,11 +1,20 @@
 "use client";
 import { initFirebase } from "@/lib/firebase";
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
-import React, { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 interface AuthContext {
   user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>> | null
+  setUser: Dispatch<SetStateAction<User | null>> | null;
 }
 
 const UserContext = createContext<AuthContext>({ user: null, setUser: null });
@@ -23,9 +32,11 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
   initFirebase();
 
-  return <UserContext.Provider value={{ user, setUser }}>
-    {children}
-  </UserContext.Provider>;
+  const contextValue = useMemo(() => ({ user, setUser }), [user, setUser]);
+
+  return (
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
+  );
 };
 
 export default UserProvider;
