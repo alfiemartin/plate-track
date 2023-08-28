@@ -3,7 +3,7 @@ import { ActionMap } from "@/utils/types";
 interface CarModels {
   for: string;
   carModels: string[];
-} 
+}
 
 export interface PlateFormState {
   userAllowsEmail?: boolean;
@@ -11,25 +11,36 @@ export interface PlateFormState {
 }
 
 export enum PlateFormTypes {
-  SetCarModels
+  SetCarModels,
+  ClearCarModels,
 }
 
 export type PlateFormPayload = {
   [PlateFormTypes.SetCarModels]: CarModels;
+  [PlateFormTypes.ClearCarModels]: never;
 };
 
-export type PlateFormActions = ActionMap<PlateFormPayload>[keyof ActionMap<PlateFormPayload>];
+export type PlateFormActions =
+  ActionMap<PlateFormPayload>[keyof ActionMap<PlateFormPayload>];
 
-const PlateFormReducer = (state: PlateFormState, action: PlateFormActions): PlateFormState => {
+const PlateFormReducer = (
+  state: PlateFormState,
+  action: PlateFormActions
+): PlateFormState => {
   switch (action.type) {
     case PlateFormTypes.SetCarModels:
       return {
         ...state,
-        carModels: action.payload
-      }
+        carModels: action.payload,
+      };
+    case PlateFormTypes.ClearCarModels:
+      return {
+        ...state,
+        carModels: undefined,
+      };
     default:
       return {
-        ...state
+        ...state,
       };
   }
 };

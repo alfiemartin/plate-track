@@ -11,19 +11,18 @@ import { string, object, date, boolean } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledTextArea from "@/components/forms/text-area/controlled-textarea";
 import { Checkbox, Divider } from "@nextui-org/react";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  signInWithPopup,
-} from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import FileInput from "@/components/forms/file-uploader/file-uploder";
 import { useUserContext } from "@/providers/user/user-provider";
 import RequiredFields from "./required-fields";
 import LocationFields from "./location-fields";
 import CarNumberPlateField from "./individual-fields/car-number-plate-field";
-import PlateFormProvider, { usePlateFormContext } from "@/providers/form/form-provider";
+import PlateFormProvider, {
+  usePlateFormContext,
+} from "@/providers/form/form-provider";
 import { PlateFormTypes } from "@/providers/form/form-reducer";
 import { convertToSelectOptions } from "@/utils/forms";
+import CarModelsField from "./individual-fields/car-models-field";
 interface FormProps {
   carMakes: CarMakesResponse["data"];
 }
@@ -89,18 +88,16 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   const [state, dispatch] = usePlateFormContext();
 
-  const models = state.carModels?.carModels && convertToSelectOptions(state.carModels?.carModels);
+  const models =
+    state.carModels?.carModels &&
+    convertToSelectOptions(state.carModels?.carModels);
 
   useEffect(() => {
     (async () => {
       if (carMake?.value) {
         dispatch({
-          type: PlateFormTypes.SetCarModels,
-          payload: {
-            carModels: [],
-            for: '' 
-          },
-        })
+          type: PlateFormTypes.ClearCarModels,
+        });
         resetField("carModel");
         const models: CarModelsResponse["data"] = await (
           await fetch(`/api/cars/models?make=${carMake.value}`)
@@ -109,9 +106,9 @@ const MainForm = ({ carMakes }: FormProps) => {
           type: PlateFormTypes.SetCarModels,
           payload: {
             for: carMake.value,
-            carModels: models.map(x => x.name)
+            carModels: models.map(({ name }) => name),
           },
-        })
+        });
       }
     })();
   }, [carMake]);
@@ -123,20 +120,18 @@ const MainForm = ({ carMakes }: FormProps) => {
       const auth = getAuth();
       signInWithPopup(auth, provider)
         .then((x) => {
-          if(setUser) {
+          if (setUser) {
             setUser(x.user);
           }
         })
         .catch((error) => {
-          setValue('signedIn', false);
+          setValue("signedIn", false);
           alert("something went wrong");
         });
     }
   }, [signedinWatch]);
 
   const [file, setFile] = useState<File>();
-
-  console.log(!!!state.carModels?.carModels && !!formState.dirtyFields.carMake)
 
   return (
     <FormProvider {...methods}>
@@ -150,13 +145,7 @@ const MainForm = ({ carMakes }: FormProps) => {
           placeholder="Make"
           options={carMakes?.map((x) => ({ label: x.name, value: x.name }))}
         />
-        <ControlledSelect
-          name="carModel"
-          id="carModel"
-          placeholder="Model"
-          isLoading={!!!state.carModels?.carModels && !!formState.dirtyFields.carMake}
-          options={models}
-        />
+        <CarModelsField />
         <Divider />
         <p>Cantact preferences</p>
         <ControlledInput
@@ -186,8 +175,8 @@ const MainForm = ({ carMakes }: FormProps) => {
           onFileChange={setFile}
           file={file}
           classNames={{
-            input: 'text-medium opacity-0',
-            label: '!translate-y-0'
+            input: "text-medium opacity-0",
+            label: "!translate-y-0",
           }}
           label="Click here to upload a file"
           isCheckboxGuarded
@@ -200,8 +189,8 @@ const MainForm = ({ carMakes }: FormProps) => {
   );
 };
 
-export default ({ carMakes }: FormProps) => (
+export default (props: FormProps) => (
   <PlateFormProvider>
-    <MainForm carMakes={carMakes} />
+    <MainForm {...props} />
   </PlateFormProvider>
 );
