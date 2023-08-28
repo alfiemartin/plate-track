@@ -1,4 +1,4 @@
-import { FormInputs, FormNames } from "@/app/submit-details/main-form";
+import { FormInputs, FormNames } from "@/app/submit-details/main-form/main-form";
 import { TextAreaProps, Textarea } from "@nextui-org/react";
 import React from "react";
 import { useController, useFormContext } from "react-hook-form";

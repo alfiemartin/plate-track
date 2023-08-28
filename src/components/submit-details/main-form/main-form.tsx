@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { CarMakesResponse, CarModelsResponse } from "../../services/carapi";
+import { CarMakesResponse, CarModelsResponse } from "../../../services/carapi";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import ControlledInput from "@/components/forms/input/controlled-input";
 import ControlledSelect, {
@@ -9,7 +9,6 @@ import ControlledSelect, {
 } from "@/components/forms/select/controlled-select";
 import { string, object, date, boolean } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ControlledDatepicker from "@/components/forms/date-picker/date-picker";
 import ControlledTextArea from "@/components/forms/text-area/controlled-textarea";
 import { Checkbox, Divider } from "@nextui-org/react";
 import {
@@ -19,6 +18,12 @@ import {
 } from "firebase/auth";
 import FileInput from "@/components/forms/file-uploader/file-uploder";
 import { useUserContext } from "@/providers/user/user-provider";
+import RequiredFields from "./required-fields";
+import LocationFields from "./location-fields";
+import CarNumberPlateField from "./individual-fields/car-number-plate-field";
+import PlateFormProvider, { usePlateFormContext } from "@/providers/form/form-provider";
+import { PlateFormTypes } from "@/providers/form/form-reducer";
+import { convertToSelectOptions } from "@/utils/forms";
 interface FormProps {
   carMakes: CarMakesResponse["data"];
 }
@@ -79,20 +84,34 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   const { control, watch, resetField, formState, setValue } = methods;
 
-  const [carModels, setCarModels] = useState<CarModel[]>();
-
   const carMake = watch("carMake");
   const signedinWatch = watch("signedIn");
+
+  const [state, dispatch] = usePlateFormContext();
+
+  const models = state.carModels?.carModels && convertToSelectOptions(state.carModels?.carModels);
 
   useEffect(() => {
     (async () => {
       if (carMake?.value) {
-        setCarModels(undefined);
+        dispatch({
+          type: PlateFormTypes.SetCarModels,
+          payload: {
+            carModels: [],
+            for: '' 
+          },
+        })
         resetField("carModel");
         const models: CarModelsResponse["data"] = await (
           await fetch(`/api/cars/models?make=${carMake.value}`)
         ).json();
-        setCarModels(models.map((x) => ({ label: x.name, value: x.name })));
+        dispatch({
+          type: PlateFormTypes.SetCarModels,
+          payload: {
+            for: carMake.value,
+            carModels: models.map(x => x.name)
+          },
+        })
       }
     })();
   }, [carMake]);
@@ -117,69 +136,26 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   const [file, setFile] = useState<File>();
 
+  console.log(!!!state.carModels?.carModels && !!formState.dirtyFields.carMake)
+
   return (
     <FormProvider {...methods}>
       <form className="w-full sm:w-96 mx-auto flex flex-col gap-4">
-        <Divider />
-        <p>Required fields</p>
-        <ControlledDatepicker
-          name="dateOfAccident"
-          id="dateOfAccident"
-          label="Date of accident"
-          labelPlacement="inside"
-        />
-        <div className="flex gap-2">
-          <ControlledDatepicker
-            name="startDateOfAccident"
-            id="timeStartOfAccident"
-            isYearPicker
-            label="Start time"
-            labelPlacement="inside"
-          />
-          <ControlledDatepicker
-            name="endDateOfAccident"
-            id="endDateOfAccident"
-            isYearPicker
-            label="End time"
-            labelPlacement="inside"
-          />
-        </div>
-        <Divider />
-        <p>Fill atleast one of these fields</p>
-        <ControlledInput
-          name="streetName"
-          id="streetName"
-          label="Street name"
-          labelPlacement="inside"
-        />
-        <ControlledInput
-          name="postalCode"
-          id="postalCode"
-          label="Postal code"
-          labelPlacement="inside"
-        />
-        <Divider />
-        <p>Fill these fields if you can</p>
-        <ControlledInput
-          name="carPlateNumber"
-          id="carPlateNumber"
-          label="Car number plate"
-          labelPlacement="inside"
-        />
+        <RequiredFields />
+        <LocationFields />
+        <CarNumberPlateField />
         <ControlledSelect
-          control={control}
           name="carMake"
           id="carMake"
           placeholder="Make"
           options={carMakes?.map((x) => ({ label: x.name, value: x.name }))}
         />
         <ControlledSelect
-          control={control}
           name="carModel"
           id="carModel"
           placeholder="Model"
-          isLoading={!!!carModels && !!formState.dirtyFields.carMake}
-          options={carModels}
+          isLoading={!!!state.carModels?.carModels && !!formState.dirtyFields.carMake}
+          options={models}
         />
         <Divider />
         <p>Cantact preferences</p>
@@ -224,4 +200,8 @@ const MainForm = ({ carMakes }: FormProps) => {
   );
 };
 
-export default MainForm;
+export default ({ carMakes }: FormProps) => (
+  <PlateFormProvider>
+    <MainForm carMakes={carMakes} />
+  </PlateFormProvider>
+);

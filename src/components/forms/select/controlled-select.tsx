@@ -1,5 +1,6 @@
+import { FormInputs } from "@/components/submit-details/main-form/main-form";
 import React from "react";
-import { Controller } from "react-hook-form";
+import { useController, useFormContext } from "react-hook-form";
 import ReactSelect, { Props } from "react-select";
 import { object, string } from "yup";
 
@@ -15,71 +16,71 @@ export const yupSelectOption = object({
   label: string().required(),
 });
 
-interface SelectProps extends Props {
-  control: any;
-  name: string;
+interface SelectProps extends Props{
+  name: keyof FormInputs;
   options?: Option[];
 }
 
 const ControlledSelect = ({
   name,
-  control,
   options,
   placeholder,
   isLoading,
 }: SelectProps) => {
+  const { control } = useFormContext<FormInputs>();
+
+  const { field } = useController({
+    name,
+    control,
+  });
+
   return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={emptyOption}
-      render={({ field }) => (
-        <ReactSelect
-          {...field}
-          aria-label={name}
-          id={name}
-          value={field.value?.value ? field.value : null}
-          options={options}
-          placeholder={<label className="text-sm px-1">{placeholder}</label>}
-          isLoading={isLoading}
-          isDisabled={!options}
-          isSearchable={false}
-          formatOptionLabel={({ value }) => (
-            <label htmlFor={name} className="text-medium px-1">{value}</label>
-          )}
-          styles={{
-            menu: (base) =>  ({
-              ...base,
-              zIndex: 11,
-            }),
-            control: (base, state) => ({
-              ...base,
-              borderWidth: undefined,
-              borderColor: undefined,
-              borderRadius: undefined,
-              boxShadow: undefined,
-              outline: undefined,
-              transition: undefined,
-              "&:hover": {
-                outline: undefined,
-                borderColor: undefined,
-              },
-            }),
-          }}
-          classNames={{
-            control: (state) => {
-              let base =
-                "transition-colors border-default-200 hover:border-default-400 border-medium rounded-medium h-14";
-
-              if (state.menuIsOpen || state.isFocused) {
-                base = "!border-foreground ".concat(base);
-              }
-
-              return base;
-            },
-          }}
-        />
+    <ReactSelect
+      {...field}
+      aria-label={name}
+      id={name}
+      value={field.value ? field.value as Option : null}
+      options={options}
+      placeholder={<label className="text-sm px-1">{placeholder}</label>}
+      isLoading={isLoading}
+      isDisabled={!options}
+      isSearchable={false}
+      formatOptionLabel={({ label }: Option) => (
+        <label htmlFor={name} className="text-medium px-1">
+          {label}
+        </label>
       )}
+      styles={{
+        menu: (base) => ({
+          ...base,
+          zIndex: 11,
+        }),
+        control: (base, state) => ({
+          ...base,
+          borderWidth: undefined,
+          borderColor: undefined,
+          borderRadius: undefined,
+          boxShadow: undefined,
+          outline: undefined,
+          transition: undefined,
+          "&:hover": {
+            outline: undefined,
+            borderColor: undefined,
+          },
+        }),
+      }}
+      classNames={{
+        control: (state) => {
+          let base =
+            "transition-colors border-default-200 hover:border-default-400 border-medium rounded-medium h-14";
+
+          if (state.menuIsOpen || state.isFocused) {
+            base = "!border-foreground ".concat(base);
+          }
+
+          return base;
+        },
+      }}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { FormInputs, FormNames } from "@/app/submit-details/main-form";
+import { FormInputs, FormNames } from "@/components/submit-details/main-form/main-form";
 import { Checkbox, Input, InputProps } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useController, useFormContext } from "react-hook-form";

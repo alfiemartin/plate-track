@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { FormInputs, FormNames } from "../../../app/submit-details/main-form";
+import { FormInputs, FormNames } from "../../../app/submit-details/main-form/main-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiClock } from 'react-icons/hi';
 

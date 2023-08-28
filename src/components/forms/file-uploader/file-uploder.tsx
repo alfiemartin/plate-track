@@ -1,4 +1,4 @@
-import { FormNames } from "@/app/submit-details/main-form";
+import { FormNames } from "@/app/submit-details/main-form/main-form";
 import { Checkbox, Input, InputProps } from "@nextui-org/react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { HiUpload } from 'react-icons/hi';
