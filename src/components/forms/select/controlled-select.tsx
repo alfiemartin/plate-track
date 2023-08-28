@@ -1,4 +1,4 @@
-import { FormInputs } from "@/components/submit-details/main-form/main-form";
+import { FormInputs, FormNames } from "@/components/submit-details/main-form/form-types";
 import React from "react";
 import { useController, useFormContext } from "react-hook-form";
 import ReactSelect, { Props } from "react-select";
@@ -17,7 +17,7 @@ export const yupSelectOption = object({
 });
 
 interface SelectProps extends Props{
-  name: keyof FormInputs;
+  name: FormNames;
   options?: Option[];
 }
 

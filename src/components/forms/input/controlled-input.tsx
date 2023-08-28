@@ -1,4 +1,4 @@
-import { FormInputs, FormNames } from "@/components/submit-details/main-form/main-form";
+import { FormNames, FormInputs } from "@/components/submit-details/main-form/form-types";
 import { Checkbox, Input, InputProps } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useController, useFormContext } from "react-hook-form";
@@ -17,7 +17,7 @@ const ControlledInput = ({
   checkboxLabel,
   ...inputProps
 }: ControlledInputProps) => {
-  const { control, setValue, trigger } = useFormContext<FormInputs>();
+  const { control, setValue } = useFormContext<FormInputs>();
 
   const {
     field

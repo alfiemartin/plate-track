@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import { CarMakesResponse, CarModelsResponse } from "../../../services/carapi";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import ControlledInput from "@/components/forms/input/controlled-input";
-import ControlledSelect, {
-  Option,
-  yupSelectOption,
-} from "@/components/forms/select/controlled-select";
-import { string, object, date, boolean } from "yup";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import ControlledTextArea from "@/components/forms/text-area/controlled-textarea";
 import { Checkbox, Divider } from "@nextui-org/react";
@@ -21,50 +17,12 @@ import PlateFormProvider, {
   usePlateFormContext,
 } from "@/providers/form/form-provider";
 import { PlateFormTypes } from "@/providers/form/form-reducer";
-import { convertToSelectOptions } from "@/utils/forms";
 import CarModelsField from "./individual-fields/car-models-field";
+import CarMakesField from "./individual-fields/car-makes-field";
+import { FormInputs, MainFormSchema } from "./form-types";
 interface FormProps {
   carMakes: CarMakesResponse["data"];
 }
-
-export type FormNames = keyof FormInputs;
-
-interface CarModel {
-  label: string;
-  value: string;
-}
-
-export interface FormInputs {
-  carPlateNumber: string;
-  carMake: Option | undefined;
-  carModel: Option | undefined;
-  dateOfAccident: Date;
-  startDateOfAccident: Date;
-  endDateOfAccident: Date;
-  streetName: string | undefined;
-  postalCode: string | undefined;
-  contactPhoneNumber: string | undefined;
-  contactEmail: string | undefined;
-  requestContact: boolean | undefined;
-  message: string | undefined;
-  signedIn: boolean;
-}
-
-const schema = object().shape({
-  carPlateNumber: string().required(),
-  carMake: yupSelectOption.optional(),
-  carModel: yupSelectOption.optional(),
-  dateOfAccident: date().required(),
-  startDateOfAccident: date().required(),
-  endDateOfAccident: date().required(),
-  streetName: string().optional(),
-  postalCode: string().optional(),
-  contactPhoneNumber: string().optional(),
-  contactEmail: string().optional(),
-  message: string().optional(),
-  requestContact: boolean().optional(),
-  signedIn: boolean().required(),
-});
 
 const provider = new GoogleAuthProvider();
 
@@ -78,19 +36,15 @@ const MainForm = ({ carMakes }: FormProps) => {
     },
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(schema),
+    resolver: yupResolver(MainFormSchema),
   });
 
-  const { control, watch, resetField, formState, setValue } = methods;
+  const { control, watch, resetField, setValue } = methods;
 
   const carMake = watch("carMake");
   const signedinWatch = watch("signedIn");
 
-  const [state, dispatch] = usePlateFormContext();
-
-  const models =
-    state.carModels?.carModels &&
-    convertToSelectOptions(state.carModels?.carModels);
+  const [, dispatch] = usePlateFormContext();
 
   useEffect(() => {
     (async () => {
@@ -131,6 +85,13 @@ const MainForm = ({ carMakes }: FormProps) => {
     }
   }, [signedinWatch]);
 
+  useEffect(() => {
+    dispatch({
+      type: PlateFormTypes.setCarMakes,
+      payload: carMakes.map(({ name }) => name)
+    })
+  }, [])
+
   const [file, setFile] = useState<File>();
 
   return (
@@ -139,12 +100,7 @@ const MainForm = ({ carMakes }: FormProps) => {
         <RequiredFields />
         <LocationFields />
         <CarNumberPlateField />
-        <ControlledSelect
-          name="carMake"
-          id="carMake"
-          placeholder="Make"
-          options={carMakes?.map((x) => ({ label: x.name, value: x.name }))}
-        />
+        <CarMakesField />
         <CarModelsField />
         <Divider />
         <p>Cantact preferences</p>

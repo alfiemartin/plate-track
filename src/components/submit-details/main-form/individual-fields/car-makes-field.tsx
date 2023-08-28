@@ -11,7 +11,7 @@ const CarMakesField = () => {
     name="carMake"
     id="carMake"
     placeholder="Make"
-    options={convertToSelectOptions(state.carModels?.carModels ?? [])}
+    options={convertToSelectOptions(state.carMakes ?? [])}
   />
   )
 }
