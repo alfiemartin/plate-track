@@ -1,4 +1,4 @@
-import { FormNames } from "@/app/submit-details/main-form/main-form";
+import { FormNames } from "@/components/submit-details/main-form/form-types";
 import { Checkbox, Input, InputProps } from "@nextui-org/react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { HiUpload } from 'react-icons/hi';
@@ -44,6 +44,10 @@ const FileInput = ({
       <Input
         {...inputProps}
         type="file"
+        classNames={{
+          input: "text-medium opacity-0",
+          label: "!translate-y-0 !pointer-events-none",
+        }}
         onChange={(e) => onFileChange(e.target.files![0])}
         className={isDisabled ? "disabled-input" : "enabled-input"}
         errorMessage={<p>{inputProps.errorMessage}</p>}

@@ -27,11 +27,8 @@ const ControlledSelect = ({
   placeholder,
   isLoading,
 }: SelectProps) => {
-  const { control } = useFormContext<FormInputs>();
-
   const { field } = useController({
     name,
-    control,
   });
 
   return (

@@ -12,13 +12,10 @@ const ControlledTextArea = ({
   name,
   ...textAreaPops
 }: ControlledInputProps) => {
-  const { control } = useFormContext<FormInputs>();
-
   const {
     field
   } = useController({
     name,
-    control,
   });
 
   return (

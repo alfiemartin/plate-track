@@ -1,3 +1,4 @@
+import { FormNames } from "@/components/submit-details/main-form/form-types";
 import { ActionMap } from "@/utils/types";
 
 interface CarModels {
@@ -5,17 +6,25 @@ interface CarModels {
   carModels: string[];
 }
 
+interface Journey {
+  dateHasBeenChosen?: boolean;
+  inUseFields?: FormNames[];
+}
+
 export interface PlateFormState {
   userAllowsEmail?: boolean;
   carModels?: CarModels;
   carMakes?: string[];
+  journey?: Journey;
 }
 
 export enum PlateFormTypes {
   SetCarModels,
   ClearCarModels,
   ClearCarMakes,
-  setCarMakes
+  setCarMakes,
+  SetJourneyDateChose,
+  setInUseFields,
 }
 
 export type PlateFormPayload = {
@@ -23,6 +32,8 @@ export type PlateFormPayload = {
   [PlateFormTypes.ClearCarModels]: never;
   [PlateFormTypes.setCarMakes]: string[];
   [PlateFormTypes.ClearCarMakes]: never;
+  [PlateFormTypes.SetJourneyDateChose]: boolean;
+  [PlateFormTypes.setInUseFields]: FormNames[];
 };
 
 export type PlateFormActions =
@@ -42,6 +53,22 @@ const PlateFormReducer = (
       return {
         ...state,
         carMakes: action.payload,
+      };
+    case PlateFormTypes.setInUseFields:
+      return {
+        ...state,
+        journey: {
+          ...state.journey,
+          inUseFields: action.payload
+        }
+      };
+    case PlateFormTypes.SetJourneyDateChose:
+      return {
+        ...state,
+        journey: {
+          ...state.journey,
+          dateHasBeenChosen: action.payload,
+        },
       };
     case PlateFormTypes.ClearCarMakes:
       return {

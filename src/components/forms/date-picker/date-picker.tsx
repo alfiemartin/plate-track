@@ -3,9 +3,10 @@ import React, { forwardRef } from "react";
 import { useController, useFormContext } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import { FormInputs, FormNames } from "../../../app/submit-details/main-form/main-form";
 import "react-datepicker/dist/react-datepicker.css";
 import { HiClock } from 'react-icons/hi';
+import { FormInputs, FormNames } from "@/components/submit-details/main-form/form-types";
+import { usePlateFormContext } from "@/providers/form/form-provider";
 
 interface ControlledDatePickerProps extends InputProps {
   name: FormNames;
@@ -25,15 +26,16 @@ const ControlledDatepicker = ({
   isYearPicker = false,
   ...inputProps
 }: ControlledDatePickerProps) => {
-  const { control } = useFormContext<FormInputs>();
+  const [state] = usePlateFormContext();
 
   const {
     field: { ref, onChange, value },
     fieldState: { invalid, isDirty, error },
   } = useController({
-    name,
-    control,
+    name: state.journey?.inUseFields?.includes(name) ? name : '',
   });
+
+  // if(!state.journey?.inUseFields?.includes(name)) return null;
 
   return (
     <DatePicker

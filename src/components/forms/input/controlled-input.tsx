@@ -17,13 +17,12 @@ const ControlledInput = ({
   checkboxLabel,
   ...inputProps
 }: ControlledInputProps) => {
-  const { control, setValue } = useFormContext<FormInputs>();
+  const { setValue } = useFormContext<FormInputs>();
 
   const {
     field
   } = useController({
     name,
-    control,
   });
 
   const [checked, setChecked] = useState(false);
