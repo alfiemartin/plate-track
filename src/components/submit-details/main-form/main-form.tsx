@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { CarMakesResponse } from "../../../services/carapi";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, ButtonGroup } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import RequiredFields from "./required-fields";
 import PlateFormProvider, {
   usePlateFormContext,
@@ -19,8 +19,6 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   const schema = usePlateSchema(dispatch, fields);
 
-  console.log({ schema });
-
   const methods = useForm({
     defaultValues: {
       dateOfAccident: undefined,
@@ -35,7 +33,6 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   useEffect(() => {
     if(dateWatch) {
-      console.log(methods.getValues())
       setFields(['dateOfAccident', 'startDateOfAccident'])
     }
   }, [dateWatch])

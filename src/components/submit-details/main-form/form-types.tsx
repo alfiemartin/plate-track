@@ -79,7 +79,6 @@ export const usePlateSchema = <T extends Array<FormNames>>(
   }, [needed])
 
   const schema = useMemo(() => {
-    console.log('schema set');
     return getSchema(neededFields);
   }, [])
 
