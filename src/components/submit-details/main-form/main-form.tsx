@@ -1,25 +1,25 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CarMakesResponse } from "../../../services/carapi";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, ButtonGroup } from "@nextui-org/react";
-import { GoogleAuthProvider } from "firebase/auth";
 import RequiredFields from "./required-fields";
 import PlateFormProvider, {
   usePlateFormContext,
 } from "@/providers/form/form-provider";
-import { usePlateSchema } from "./form-types";
+import { FormNames, usePlateSchema } from "./form-types";
 interface FormProps {
   carMakes: CarMakesResponse["data"];
 }
 
-const provider = new GoogleAuthProvider();
-
 const MainForm = ({ carMakes }: FormProps) => {
-  const [state] = usePlateFormContext();
+  const [state, dispatch] = usePlateFormContext();
+  const [fields, setFields] = useState<Array<FormNames>>(['dateOfAccident']);
 
-  const MainFormSchema = usePlateSchema(['dateOfAccident']);
+  const schema = usePlateSchema(dispatch, fields);
+
+  console.log({ schema });
 
   const methods = useForm({
     defaultValues: {
@@ -27,17 +27,18 @@ const MainForm = ({ carMakes }: FormProps) => {
     },
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(MainFormSchema),
+    resolver: yupResolver(schema),
+    progressive: true
   });
 
-  const { watch } = methods;
-
-  const dateWatch = watch("dateOfAccident");
+  const dateWatch = methods.watch('dateOfAccident');
 
   useEffect(() => {
-    console.log(dateWatch, methods.getValues());
-  }, [dateWatch]);
-
+    if(dateWatch) {
+      console.log(methods.getValues())
+      setFields(['dateOfAccident', 'startDateOfAccident'])
+    }
+  }, [dateWatch])
 
   return (
     <FormProvider {...methods}>
@@ -49,7 +50,7 @@ const MainForm = ({ carMakes }: FormProps) => {
         >
           Continue
         </Button>
-        {state.journey?.dateHasBeenChosen && (
+        {/* {state.journey?.dateHasBeenChosen && (
           <ButtonGroup>
             <Button className="flex-1" variant="solid">
               Street Name
@@ -58,7 +59,7 @@ const MainForm = ({ carMakes }: FormProps) => {
               Post Code
             </Button>
           </ButtonGroup>
-        )}
+        )} */}
         {/* <LocationFields /> */}
         {/* <CarNumberPlateField />
         <CarMakesField />

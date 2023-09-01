@@ -18,7 +18,10 @@ export const usePlateFormContext = () => useContext(PlateFormContext);
 const PlateFormProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(PlateFormReducer, {  });
 
-  const contextValue = useMemo<PlateFormContext>(() => ([ state, dispatch ]), [state, dispatch]);
+  const contextValue = useMemo<PlateFormContext>(() => {
+    console.log('plate form context updated');
+    return [ state, dispatch ];
+  }, [state, dispatch]);
 
   return (
     <PlateFormContext.Provider value={contextValue}>{children}</PlateFormContext.Provider>

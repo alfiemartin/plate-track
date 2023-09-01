@@ -7,8 +7,10 @@ import {
   PlateFormActions,
   PlateFormTypes,
 } from "@/providers/form/form-reducer";
-import { Dispatch, useEffect, useMemo } from "react";
-import { boolean, date, object, string } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Dispatch, useEffect, useMemo, useState, memo } from "react";
+import { useForm } from "react-hook-form";
+import { ObjectSchema, boolean, date, object, string } from "yup";
 
 export interface FormInputs {
   carPlateNumber: string;
@@ -48,7 +50,7 @@ export const getSchema = <T extends Array<keyof SchemaType>>(
   neededFields?: T
 ) => {
   if (!neededFields) {
-    return object(MainFormSchema);
+    return object(MainFormSchema as Pick<SchemaType, T[number]>);
   }
 
   const filteredSchema = Object.entries(MainFormSchema)
@@ -61,19 +63,25 @@ export const getSchema = <T extends Array<keyof SchemaType>>(
   return object(filteredSchema);
 };
 
-export const usePlateSchema = <T extends Array<keyof SchemaType>>(
-  neededFields?: T
+export const usePlateSchema = <T extends Array<FormNames>>(
+  dispatch: Dispatch<PlateFormActions>,
+  neededFields: T
 ) => {
-  const [, dispatch] = usePlateFormContext();
+  const needed = neededFields.reduce((prev, curr) => (`${prev}${curr}`), '');
 
   useEffect(() => {
-    dispatch({
-      type: PlateFormTypes.setInUseFields,
-      payload: !!neededFields ? neededFields : Object.keys(MainFormSchema) as Array<FormNames>,
-    });
-  }, neededFields);
+    if(neededFields) {
+      dispatch({
+        type: PlateFormTypes.setInUseFields,
+        payload: [...neededFields]
+      })
+    }
+  }, [needed])
 
-  const schema = useMemo(() => getSchema(neededFields), [neededFields]);
+  const schema = useMemo(() => {
+    console.log('schema set');
+    return getSchema(neededFields);
+  }, [])
 
   return schema;
 };

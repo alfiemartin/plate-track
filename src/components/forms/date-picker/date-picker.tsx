@@ -29,13 +29,10 @@ const ControlledDatepicker = ({
   const [state] = usePlateFormContext();
 
   const {
-    field: { ref, onChange, value },
-    fieldState: { invalid, isDirty, error },
+    field: { onChange, value },
   } = useController({
     name: state.journey?.inUseFields?.includes(name) ? name : '',
   });
-
-  // if(!state.journey?.inUseFields?.includes(name)) return null;
 
   return (
     <DatePicker
