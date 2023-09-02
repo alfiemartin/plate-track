@@ -26,7 +26,6 @@ export interface FormInputs {
 }
 
 const MainFormSchema = {
-  carPlateNumber: string().required(),
   carMake: yupSelectOption.optional(),
   carModel: yupSelectOption.optional(),
   dateOfAccident: date().required(),
@@ -34,6 +33,7 @@ const MainFormSchema = {
   endDateOfAccident: date().required(),
   streetName: string().optional(),
   postalCode: string().optional(),
+  carPlateNumber: string().optional(),
   contactPhoneNumber: string().optional(),
   contactEmail: string().optional(),
   message: string().optional(),

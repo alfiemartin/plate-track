@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { CommonStepProps } from "./step-one";
-import { Chip } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import { CommonStepProps, hasRequiredFields } from "./step-one";
+import { Chip, Divider } from "@nextui-org/react";
 import StepTitle from "./step-title";
 import ControlledInput from "@/components/forms/input/controlled-input";
-import { FormNames } from "./form-types";
+import { FormInputs, FormNames } from "./form-types";
 import { usePlateFormContext } from "@/providers/form/form-provider";
 import { PlateFormTypes } from "@/providers/form/form-reducer";
 import ContinueButton from "./continue-button";
 import { HiOutlineCheck } from "react-icons/hi";
+import { useFormContext } from "react-hook-form";
+import CarMakesField from "./individual-fields/car-makes-field";
 
 type ChipState = {
   name: FormNames;
@@ -35,9 +37,16 @@ const defaultChipState: Array<ChipState> = [
 
 const StepTwo = ({ swiper }: CommonStepProps) => {
   const [chipsState, setChipsState] = useState<ChipState[]>(defaultChipState);
-  const [, dispatch] = usePlateFormContext();
+  const [state, dispatch] = usePlateFormContext();
+
+  const { formState, resetField } = useFormContext<FormInputs>();
 
   const toggleChip = (name: FormNames) => {
+    const chip = chipsState.find((chip) => chip.name === name);
+    if (chip?.selected) {
+      resetField(name);
+    }
+
     setChipsState((prevChipState) => {
       const newState = prevChipState.map((chip) => {
         return {
@@ -51,14 +60,24 @@ const StepTwo = ({ swiper }: CommonStepProps) => {
 
     dispatch({
       type: PlateFormTypes.setInUseFields,
-      payload: chipsState
-        .filter(
-          (chip) =>
-            chip.selected === true || (chip.name === name && !chip.selected)
-        )
-        .map((chip) => chip.name),
+      payload: [
+        ...(state.journey?.inUseFields ?? []),
+        ...chipsState
+          .filter(
+            (chip) =>
+              chip.selected === true || (chip.name === name && !chip.selected)
+          )
+          .map((chip) => chip.name),
+      ],
     });
   };
+
+  useEffect(() => {
+    dispatch({
+      type: PlateFormTypes.setInUseFields,
+      payload: [],
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
@@ -66,30 +85,60 @@ const StepTwo = ({ swiper }: CommonStepProps) => {
         title="Step 2"
         subtitle="Choose one or more fields that you want the victim to submit to be able to connect with you"
       />
-      <div className="flex gap-2">
-        {chipsState.map(({ displayName, name, selected }) => (
-          <Chip
-            key={name}
-            color={selected ? "primary" : "default"}
-            className="hover:cursor-pointer"
-            endContent={selected && <HiOutlineCheck />}
-            onClick={() => toggleChip(name)}
-          >
-            {displayName}
-          </Chip>
-        ))}
-      </div>
-      {chipsState.map(({ name, displayName, selected }) => (
-        <ControlledInput
-          key={name}
-          name={name}
-          id={name}
-          label={displayName}
-          labelPlacement="inside"
-          disabled={!selected ? true : false}
-        />
-      ))}
-      <ContinueButton />
+      {!state.journey?.inUseFields?.includes("carMake") && (
+        <>
+          <div className="flex gap-2">
+            {chipsState.map(({ displayName, name, selected }) => (
+              <Chip
+                key={name}
+                color={selected ? "primary" : "default"}
+                className="hover:cursor-pointer"
+                endContent={selected && <HiOutlineCheck />}
+                onClick={() => toggleChip(name)}
+              >
+                {displayName}
+              </Chip>
+            ))}
+          </div>
+          {chipsState.map(
+            ({ name, displayName, selected }) =>
+              selected && (
+                <ControlledInput
+                  key={name}
+                  name={name}
+                  id={name}
+                  label={displayName}
+                  labelPlacement="inside"
+                  disabled={!selected ? true : false}
+                />
+              )
+          )}
+        </>
+      )}
+      {state.journey?.inUseFields?.includes("carMake") && (
+        <>
+          <div>
+            <p className="text-right text-xs text-gray-400">Optional</p>
+            <Divider />
+          </div>
+          <CarMakesField />
+        </>
+      )}
+      <ContinueButton
+        onClick={() => {
+          dispatch({
+            type: PlateFormTypes.setInUseFields,
+            payload: [...(state.journey?.inUseFields ?? []), "carMake"],
+          });
+        }}
+        isDisabled={
+          !hasRequiredFields(
+            formState.dirtyFields,
+            defaultChipState.map(({ name }) => name),
+            false
+          )
+        }
+      />
     </div>
   );
 };

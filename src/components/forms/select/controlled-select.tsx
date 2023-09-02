@@ -1,4 +1,5 @@
 import { FormInputs, FormNames } from "@/components/submit-details/main-form/form-types";
+import { usePlateFormContext } from "@/providers/form/form-provider";
 import React from "react";
 import { useController, useFormContext } from "react-hook-form";
 import ReactSelect, { Props } from "react-select";
@@ -27,8 +28,9 @@ const ControlledSelect = ({
   placeholder,
   isLoading,
 }: SelectProps) => {
+  const [state] = usePlateFormContext();
   const { field } = useController({
-    name,
+    name: state.journey?.inUseFields?.includes(name) ? name : "",
   });
 
   return (

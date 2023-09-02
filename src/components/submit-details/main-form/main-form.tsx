@@ -16,6 +16,9 @@ import StepTwo from "./step-two";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
+import { Button, Link } from "@nextui-org/react";
+import { convertToSelectOptions } from "@/utils/forms";
+import ControlledSelect from "@/components/forms/select/controlled-select";
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -29,6 +32,11 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   const methods = useForm({
     mode: "onChange",
+    defaultValues: {
+      carPlateNumber: "",
+      streetName: "",
+      postalCode: "",
+    },
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
   });
@@ -37,6 +45,11 @@ const MainForm = ({ carMakes }: FormProps) => {
     dispatch({
       type: PlateFormTypes.setInUseFields,
       payload: ["dateOfAccident", "startDateOfAccident", "endDateOfAccident"],
+    });
+
+    dispatch({
+      type: PlateFormTypes.setCarMakes,
+      payload: carMakes.map((carMake) => carMake.name),
     });
   }, []);
 
@@ -48,18 +61,26 @@ const MainForm = ({ carMakes }: FormProps) => {
   return (
     <FormProvider {...methods}>
       <form className="w-full sm:w-[600px] mx-auto">
+        <Link
+          className="hover:cursor-pointer"
+          onClick={() => swiper?.slidePrev()}
+        >
+          Back
+        </Link>
         <Swiper
           onSwiper={setSwiper}
           modules={[EffectFade]}
           effect="fade"
+          initialSlide={1}
+          noSwipingSelector="*"
           allowTouchMove={false}
-          className="!overflow-visible"
+          className={swiper ? "!overflow-visible" : ""}
           fadeEffect={{ crossFade: true }}
         >
           <SwiperSlide>
             <StepOne swiper={swiper} />
           </SwiperSlide>
-          <SwiperSlide>
+          <SwiperSlide className="pointer-events-none">
             <StepTwo swiper={swiper} />
           </SwiperSlide>
         </Swiper>

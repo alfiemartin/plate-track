@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import RequiredFields from "./required-fields";
 import { useFormContext } from "react-hook-form";
 import { FormInputs, FormNames } from "./form-types";
@@ -12,18 +12,20 @@ export type CommonStepProps = {
 
 type StepOneProps = {} & CommonStepProps;
 
-
 export const hasRequiredFields = <T extends Record<PropertyKey, unknown>>(
   dirtyFields: T,
   requiredFields: (keyof T)[],
+  all = true
 ) => {
   const dirtyFieldNames = Object.keys(dirtyFields);
   const sharedFields = dirtyFieldNames.filter((dirtyField) =>
     requiredFields.includes(dirtyField)
   );
 
-  return sharedFields.length !== requiredFields.length;
-}
+  return all
+    ? sharedFields.length !== requiredFields.length
+    : sharedFields.length > 0;
+};
 
 const StepOne = ({ swiper }: StepOneProps) => {
   const { watch, formState, handleSubmit } = useFormContext<FormInputs>();
