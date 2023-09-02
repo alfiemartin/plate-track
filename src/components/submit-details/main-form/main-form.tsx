@@ -3,84 +3,66 @@ import React, { useEffect, useState } from "react";
 import { CarMakesResponse } from "../../../services/carapi";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@nextui-org/react";
-import RequiredFields from "./required-fields";
 import PlateFormProvider, {
   usePlateFormContext,
 } from "@/providers/form/form-provider";
-import { FormNames, usePlateSchema } from "./form-types";
+import { usePlateSchema } from "./form-types";
+import { SwiperSlide, Swiper } from "swiper/react";
+import { Swiper as SwiperType } from "swiper/types";
+import { EffectFade } from "swiper/modules";
+import { PlateFormTypes } from "@/providers/form/form-reducer";
+import StepOne from "./step-one";
+import StepTwo from "./step-two";
+
+import "swiper/css";
+import "swiper/css/effect-fade";
+
 interface FormProps {
   carMakes: CarMakesResponse["data"];
 }
 
 const MainForm = ({ carMakes }: FormProps) => {
   const [state, dispatch] = usePlateFormContext();
-  const [fields, setFields] = useState<Array<FormNames>>(['dateOfAccident']);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
-  const schema = usePlateSchema(dispatch, fields);
+  const schema = usePlateSchema(dispatch, state.journey?.inUseFields ?? []);
 
   const methods = useForm({
-    defaultValues: {
-      dateOfAccident: undefined,
-    },
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
-    progressive: true
   });
 
-  const dateWatch = methods.watch('dateOfAccident');
+  useEffect(() => {
+    dispatch({
+      type: PlateFormTypes.setInUseFields,
+      payload: ["dateOfAccident", "startDateOfAccident", "endDateOfAccident"],
+    });
+  }, []);
 
   useEffect(() => {
-    if(dateWatch) {
-      setFields(['dateOfAccident', 'startDateOfAccident'])
-    }
-  }, [dateWatch])
+    console.log(methods.getValues());
+    console.log(methods.formState.errors);
+  }, [methods.watch()]);
 
   return (
     <FormProvider {...methods}>
-      <form className="w-full sm:w-96 mx-auto flex flex-col gap-4">
-        <RequiredFields />
-        <Button
-          variant="solid"
-          disabled={false}
+      <form className="w-full sm:w-[600px] mx-auto">
+        <Swiper
+          onSwiper={setSwiper}
+          modules={[EffectFade]}
+          effect="fade"
+          allowTouchMove={false}
+          className="!overflow-visible"
+          fadeEffect={{ crossFade: true }}
         >
-          Continue
-        </Button>
-        {/* {state.journey?.dateHasBeenChosen && (
-          <ButtonGroup>
-            <Button className="flex-1" variant="solid">
-              Street Name
-            </Button>
-            <Button className="flex-1" variant="solid">
-              Post Code
-            </Button>
-          </ButtonGroup>
-        )} */}
-        {/* <LocationFields /> */}
-        {/* <CarNumberPlateField />
-        <CarMakesField />
-        <CarModelsField />
-        <Controller
-          control={control}
-          name="signedIn"
-          defaultValue={false}
-          render={({ field }) => (
-            <Checkbox checked={field.value} onChange={field.onChange}>
-              In app messaging? (you must sign in with google)
-            </Checkbox>
-          )}
-        />
-        <ControlledTextArea name="message" label="Message for victim" />
-        <FileInput
-          onFileChange={setFile}
-          file={file}
-          label="Click here to upload a file"
-          isCheckboxGuarded
-          type="file"
-          accept="video/*"
-          checkboxLabel="Upload video footage?"
-        /> */}
+          <SwiperSlide>
+            <StepOne swiper={swiper} />
+          </SwiperSlide>
+          <SwiperSlide>
+            <StepTwo swiper={swiper} />
+          </SwiperSlide>
+        </Swiper>
       </form>
     </FormProvider>
   );

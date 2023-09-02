@@ -1,4 +1,8 @@
-import { FormNames, FormInputs } from "@/components/submit-details/main-form/form-types";
+import {
+  FormNames,
+  FormInputs,
+} from "@/components/submit-details/main-form/form-types";
+import { usePlateFormContext } from "@/providers/form/form-provider";
 import { Checkbox, Input, InputProps } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useController, useFormContext } from "react-hook-form";
@@ -18,11 +22,10 @@ const ControlledInput = ({
   ...inputProps
 }: ControlledInputProps) => {
   const { setValue } = useFormContext<FormInputs>();
+  const [state] = usePlateFormContext();
 
-  const {
-    field
-  } = useController({
-    name,
+  const { field } = useController({
+    name: state.journey?.inUseFields?.includes(name) ? name : "",
   });
 
   const [checked, setChecked] = useState(false);
@@ -33,11 +36,11 @@ const ControlledInput = ({
     ? !checked
     : false;
 
-    useEffect(() => {
-      if(isDisabled && isCheckboxGuarded) {
-        setValue(name, '');
-      }
-    }, [isDisabled])
+  useEffect(() => {
+    if (isDisabled && isCheckboxGuarded) {
+      setValue(name, "");
+    }
+  }, [isDisabled]);
 
   return (
     <>
@@ -53,8 +56,8 @@ const ControlledInput = ({
       <Input
         {...inputProps}
         {...field}
-        value={field.value as string}
-        classNames={{ input: 'text-medium' }}
+        value={field.value ?? ""}
+        classNames={{ input: "text-medium" }}
         className={isDisabled ? "disabled-input" : "enabled-input"}
         errorMessage={<p>{inputProps.errorMessage}</p>}
         disabled={isDisabled}

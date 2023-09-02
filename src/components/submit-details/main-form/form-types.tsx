@@ -2,15 +2,12 @@ import {
   Option,
   yupSelectOption,
 } from "@/components/forms/select/controlled-select";
-import { usePlateFormContext } from "@/providers/form/form-provider";
 import {
   PlateFormActions,
   PlateFormTypes,
 } from "@/providers/form/form-reducer";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Dispatch, useEffect, useMemo, useState, memo } from "react";
-import { useForm } from "react-hook-form";
-import { ObjectSchema, boolean, date, object, string } from "yup";
+import { Dispatch, useEffect, useMemo } from "react";
+import { boolean, date, object, string } from "yup";
 
 export interface FormInputs {
   carPlateNumber: string;
@@ -67,20 +64,20 @@ export const usePlateSchema = <T extends Array<FormNames>>(
   dispatch: Dispatch<PlateFormActions>,
   neededFields: T
 ) => {
-  const needed = neededFields.reduce((prev, curr) => (`${prev}${curr}`), '');
+  const needed = neededFields.reduce((prev, curr) => `${prev}${curr}`, "");
 
   useEffect(() => {
-    if(neededFields) {
+    if (neededFields) {
       dispatch({
         type: PlateFormTypes.setInUseFields,
-        payload: [...neededFields]
-      })
+        payload: [...neededFields],
+      });
     }
-  }, [needed])
+  }, [needed]);
 
   const schema = useMemo(() => {
     return getSchema(neededFields);
-  }, [])
+  }, [needed]);
 
   return schema;
 };

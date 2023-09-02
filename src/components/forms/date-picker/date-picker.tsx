@@ -30,6 +30,7 @@ const ControlledDatepicker = ({
 
   const {
     field: { onChange, value },
+    fieldState: { error, isDirty }
   } = useController({
     name: state.journey?.inUseFields?.includes(name) ? name : '',
   });
@@ -74,10 +75,12 @@ const ControlledDatepicker = ({
       customInput={
         <CustomInput
           {...inputProps}
-          variant="bordered"
+          isRequired={inputProps?.isRequired && error ? true : false}
+          variant={error ? 'flat' : 'bordered'}
+          color={error && 'warning'}
           label={label}
           classNames={{ input: 'text-medium' }}
-          errorMessage={<p>{inputProps.errorMessage}</p>}
+          errorMessage={error && false && <p>{error?.message}</p>}
           value={value?.toString()}
           endContent={<HiClock />}
         />
