@@ -51,7 +51,6 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   useEffect(() => {
     console.log(methods.getValues());
-    console.log(methods.formState.errors);
   }, [methods.watch()]);
 
   return (

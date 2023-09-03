@@ -16,7 +16,7 @@ type ChipState = {
   selected: boolean;
 };
 
-const defaultChipState: Array<ChipState> = [
+export const defaultChipState: Array<ChipState> = [
   {
     name: "streetName",
     displayName: "Street name",

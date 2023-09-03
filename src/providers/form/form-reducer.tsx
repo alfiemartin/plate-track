@@ -9,6 +9,7 @@ interface CarModels {
 interface Journey {
   dateHasBeenChosen?: boolean;
   inUseFields?: FormNames[];
+  file?: File;
 }
 
 export interface PlateFormState {
@@ -25,6 +26,7 @@ export enum PlateFormTypes {
   setCarMakes,
   SetJourneyDateChose,
   setInUseFields,
+  setFile,
 }
 
 export type PlateFormPayload = {
@@ -34,6 +36,7 @@ export type PlateFormPayload = {
   [PlateFormTypes.ClearCarMakes]: never;
   [PlateFormTypes.SetJourneyDateChose]: boolean;
   [PlateFormTypes.setInUseFields]: FormNames[];
+  [PlateFormTypes.setFile]: File;
 };
 
 export type PlateFormActions =
@@ -62,6 +65,14 @@ const PlateFormReducer = (
           inUseFields: action.payload
         }
       };
+    case PlateFormTypes.setFile:
+      return {
+        ...state,
+        journey: {
+          ...state.journey,
+          file: action.payload
+        }
+      }
     case PlateFormTypes.SetJourneyDateChose:
       return {
         ...state,

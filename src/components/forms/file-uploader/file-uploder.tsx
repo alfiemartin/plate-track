@@ -9,7 +9,7 @@ interface FileInputProps extends InputProps {
   label: string;
   isCheckboxGuarded?: boolean;
   checkboxLabel?: string;
-  onFileChange: Dispatch<SetStateAction<File | undefined>>;
+  onFileChange?: (file: File) => unknown;
   file: File | undefined;
 }
 
@@ -48,7 +48,7 @@ const FileInput = ({
           input: "text-medium opacity-0",
           label: "!translate-y-0 !pointer-events-none",
         }}
-        onChange={(e) => onFileChange(e.target.files![0])}
+        onChange={(e) => onFileChange && onFileChange(e.target.files![0])}
         className={isDisabled ? "disabled-input" : "enabled-input"}
         errorMessage={<p>{inputProps.errorMessage}</p>}
         disabled={isDisabled}

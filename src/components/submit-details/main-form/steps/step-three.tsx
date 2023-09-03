@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { CommonStepProps, hasRequiredFields } from "./step-one";
 import StepTitle from "./step-title";
 import FileInput from "@/components/forms/file-uploader/file-uploder";
@@ -8,20 +8,26 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import ContinueButton from "../continue-button";
 import { useFormContext } from "react-hook-form";
 import { FormInputs } from "../form-types";
+import { usePlateFormContext } from "@/providers/form/form-provider";
+import { PlateFormTypes } from "@/providers/form/form-reducer";
 
 const AuthProvider = new GoogleAuthProvider();
 
 const StepThree = ({ swiper }: CommonStepProps) => {
-  const [file, setFile] = useState<File>();
   const { user, setUser } = useUserContext();
+  const [state, dispatch] = usePlateFormContext();
   const { formState } = useFormContext<FormInputs>();
 
   const handleSubmit = () => {
     if (
       (!hasRequiredFields(formState.errors, ["message"], false) &&
-        hasRequiredFields(formState.dirtyFields, ["message"], false)) ||
-      file
+        hasRequiredFields(formState.dirtyFields, ["message"], false)) || state.journey?.file
     ) {
+      dispatch({
+        type: PlateFormTypes.setInUseFields,
+        payload: []
+      })
+
       swiper?.slideNext();
     }
   };
@@ -31,8 +37,8 @@ const StepThree = ({ swiper }: CommonStepProps) => {
       <StepTitle title="Step 3" subtitle="Get in touch" />
       <ControlledTextArea name="message" label="Message for victim" />
       <FileInput
-        onFileChange={setFile}
-        file={file}
+        onFileChange={(file) => dispatch({ type: PlateFormTypes.setFile, payload: file })}
+        file={state.journey?.file}
         label="Upload video footage"
         type="file"
         accept="video/*"
