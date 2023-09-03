@@ -11,14 +11,14 @@ import { SwiperSlide, Swiper } from "swiper/react";
 import { Swiper as SwiperType } from "swiper/types";
 import { EffectFade } from "swiper/modules";
 import { PlateFormTypes } from "@/providers/form/form-reducer";
-import StepOne from "./step-one";
-import StepTwo from "./step-two";
+import { Link } from "@nextui-org/react";
+import StepTwo from "./steps/step-two";
 
 import "swiper/css";
 import "swiper/css/effect-fade";
-import { Button, Link } from "@nextui-org/react";
-import { convertToSelectOptions } from "@/utils/forms";
-import ControlledSelect from "@/components/forms/select/controlled-select";
+import StepThree from "./steps/step-three";
+import StepOne from "./steps/step-one";
+import Review from "./steps/review";
 
 interface FormProps {
   carMakes: CarMakesResponse["data"];
@@ -32,11 +32,7 @@ const MainForm = ({ carMakes }: FormProps) => {
 
   const methods = useForm({
     mode: "onChange",
-    defaultValues: {
-      carPlateNumber: "",
-      streetName: "",
-      postalCode: "",
-    },
+    defaultValues: {},
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
   });
@@ -71,7 +67,6 @@ const MainForm = ({ carMakes }: FormProps) => {
           onSwiper={setSwiper}
           modules={[EffectFade]}
           effect="fade"
-          initialSlide={1}
           noSwipingSelector="*"
           allowTouchMove={false}
           className={swiper ? "!overflow-visible" : ""}
@@ -80,8 +75,14 @@ const MainForm = ({ carMakes }: FormProps) => {
           <SwiperSlide>
             <StepOne swiper={swiper} />
           </SwiperSlide>
-          <SwiperSlide className="pointer-events-none">
+          <SwiperSlide>
             <StepTwo swiper={swiper} />
+          </SwiperSlide>
+          <SwiperSlide>
+            <StepThree swiper={swiper} />
+          </SwiperSlide>
+          <SwiperSlide>
+            <Review swiper={swiper} />
           </SwiperSlide>
         </Swiper>
       </form>

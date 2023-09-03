@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CommonStepProps, hasRequiredFields } from "./step-one";
-import { Chip, Divider } from "@nextui-org/react";
+import { Chip } from "@nextui-org/react";
 import StepTitle from "./step-title";
 import ControlledInput from "@/components/forms/input/controlled-input";
-import { FormInputs, FormNames } from "./form-types";
 import { usePlateFormContext } from "@/providers/form/form-provider";
 import { PlateFormTypes } from "@/providers/form/form-reducer";
-import ContinueButton from "./continue-button";
 import { HiOutlineCheck } from "react-icons/hi";
 import { useFormContext } from "react-hook-form";
-import CarMakesField from "./individual-fields/car-makes-field";
+import ContinueButton from "../continue-button";
+import { FormNames, FormInputs } from "../form-types";
 
 type ChipState = {
   name: FormNames;
@@ -72,13 +71,6 @@ const StepTwo = ({ swiper }: CommonStepProps) => {
     });
   };
 
-  useEffect(() => {
-    dispatch({
-      type: PlateFormTypes.setInUseFields,
-      payload: [],
-    });
-  }, []);
-
   return (
     <div className="flex flex-col gap-4">
       <StepTitle
@@ -115,21 +107,15 @@ const StepTwo = ({ swiper }: CommonStepProps) => {
           )}
         </>
       )}
-      {state.journey?.inUseFields?.includes("carMake") && (
-        <>
-          <div>
-            <p className="text-right text-xs text-gray-400">Optional</p>
-            <Divider />
-          </div>
-          <CarMakesField />
-        </>
-      )}
       <ContinueButton
         onClick={() => {
-          dispatch({
-            type: PlateFormTypes.setInUseFields,
-            payload: [...(state.journey?.inUseFields ?? []), "carMake"],
-          });
+          if(swiper) {
+            dispatch({
+              type: PlateFormTypes.setInUseFields,
+              payload: ['message']
+            })
+            swiper?.slideNext();
+          }
         }}
         isDisabled={
           !hasRequiredFields(
@@ -142,29 +128,5 @@ const StepTwo = ({ swiper }: CommonStepProps) => {
     </div>
   );
 };
-
-/* <CarMakesField />
-      <CarModelsField />
-      <Controller
-        control={methods.control}
-        name="signedIn"
-        defaultValue={false}
-        render={({ field }) => (
-          <Checkbox checked={field.value} onChange={field.onChange}>
-            In app messaging? (you must sign in with google)
-          </Checkbox>
-        )}
-      /> 
-   <ControlledTextArea name="message" label="Message for victim" />
-   <FileInput
-      onFileChange={setFile}
-      file={file}
-      label="Click here to upload a file"
-      isCheckboxGuarded
-      type="file"
-      accept="video/*"
-      checkboxLabel="Upload video footage?"
-    /> 
-    */
 
 export default StepTwo;

@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo } from "react";
-import RequiredFields from "./required-fields";
+import RequiredFields from "../required-fields";
 import { useFormContext } from "react-hook-form";
-import { FormInputs, FormNames } from "./form-types";
+import { FormInputs, FormNames } from "../form-types";
 import { Swiper } from "swiper/types";
 import StepTitle from "./step-title";
-import ContinueButton from "./continue-button";
+import ContinueButton from "../continue-button";
+import { usePlateFormContext } from "@/providers/form/form-provider";
+import { PlateFormTypes } from "@/providers/form/form-reducer";
 
 export type CommonStepProps = {
   swiper: Swiper | null;
@@ -29,6 +31,7 @@ export const hasRequiredFields = <T extends Record<PropertyKey, unknown>>(
 
 const StepOne = ({ swiper }: StepOneProps) => {
   const { watch, formState, handleSubmit } = useFormContext<FormInputs>();
+  const [, dispatch] = usePlateFormContext();
 
   const continueIsDisabled = useMemo(() => {
     return hasRequiredFields(formState.dirtyFields, [
@@ -45,7 +48,13 @@ const StepOne = ({ swiper }: StepOneProps) => {
       <ContinueButton
         isDisabled={continueIsDisabled}
         onClick={handleSubmit(() => {
-          swiper?.slideNext();
+          if(swiper) {
+            swiper.slideNext();
+            dispatch({
+              type: PlateFormTypes.setInUseFields,
+              payload: []
+            })
+          } 
         })}
       />
     </div>
